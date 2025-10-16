@@ -1,0 +1,41 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Creator & Developer -- CreatiVista ai Team
+    Site: https://creativista-ai.onrender.com
+    Location: Worldwide
+
+# THANKS
+
+    To all our users who inspire us to create better AI tools
+    To the open-source community for their invaluable contributions
+    To Google for Gemini AI technology
+
+# TECHNOLOGY COLOPHON
+
+    Frontend: React 18, TypeScript, Tailwind CSS
+    Backend: Node.js, Express.js
+    AI: Google Gemini AI (gemini-2.0-flash-exp)
+    Build Tool: Vite
+    UI Components: shadcn/ui, Radix UI
+    State Management: React Query
+    Routing: Wouter
+    Hosting: Replit
+    Version Control: Git
+    
+# FEATURES
+
+    - AI Text-to-Image Generation
+    - Background Removal
+    - Image Upscaling
+    - Image-to-Image Transformation
+    - Sketch to Image Conversion
+    - Canvas Editor
+    - Custom Art Styles
+    - Visual Effects Library
+    
+# LAST UPDATE
+
+    October 2025

@@ -1,0 +1,53 @@
+# Security Policy for CreatiVista ai
+# This file follows the security.txt standard (RFC 9116)
+# https://securitytxt.org/
+
+Contact: mailto:security@creativista.ai
+Expires: 2026-10-09T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://creativista-ai.onrender.com/security.txt
+
+# Reporting Security Issues
+
+If you discover a security vulnerability, please report it to us at:
+security@creativista.ai
+
+Please include the following information:
+- Type of vulnerability
+- Full paths of affected files
+- Location of the affected source code (if applicable)
+- Any special configuration required to reproduce the issue
+- Step-by-step instructions to reproduce the issue
+- Proof-of-concept or exploit code (if possible)
+- Impact of the issue
+
+We take all security reports seriously and will respond promptly.
+
+# Scope
+
+This security policy applies to:
+- https://creativista-ai.onrender.com
+- All subdomains of creativista.ai
+- All official CreatiVista ai applications
+
+# Out of Scope
+
+- Social engineering attacks
+- Physical attacks
+- Denial of Service (DoS) attacks
+- Spam or social engineering of our staff or contractors
+
+# Disclosure Policy
+
+- We request that you give us reasonable time to address the issue before public disclosure
+- We commit to acknowledging your report within 48 hours
+- We will provide a timeline for fixing the vulnerability
+
+# Safe Harbor
+
+We support safe harbor for security researchers who:
+- Make a good faith effort to avoid privacy violations and data destruction
+- Report vulnerabilities promptly
+- Avoid exploiting the vulnerability beyond what is necessary to demonstrate it
+
+Thank you for helping keep CreatiVista ai and our users safe!
