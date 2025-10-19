@@ -11,11 +11,9 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/hooks/useAuth";
 import { apiRequest } from "@/lib/queryClient";
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
-import type { UserArtStyle, CustomModel, UserCustomEffect } from '@shared/schema';
 import { 
   Send, 
   Download, 
@@ -62,7 +60,6 @@ const TextToImageGenerator = () => {
   const [skyDropdownOpen, setSkyDropdownOpen] = useState(false);
   const [weatherDropdownOpen, setWeatherDropdownOpen] = useState(false);
   const { toast } = useToast();
-  const { user } = useAuth();
   const [, setLocation] = useLocation();
   const createdUrlsRef = useRef<string[]>([]);
   const isGeneratingRef = useRef(false);

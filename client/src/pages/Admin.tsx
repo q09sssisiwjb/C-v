@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,20 +28,13 @@ const aspectRatios = [
 ];
 
 export default function Admin() {
-  const { user, loading: authLoading } = useAuth();
   const { toast } = useToast();
   const [imageUrl, setImageUrl] = useState("");
   const [artStyle, setArtStyle] = useState("");
   const [aspectRatio, setAspectRatio] = useState("1:1");
 
-  const { data: isAdminData, isLoading: adminCheckLoading } = useQuery<{ isAdmin: boolean }>({
-    queryKey: ["/api/admin/check", user?.email],
-    enabled: !!user?.email,
-  });
-
   const { data: communityImages, isLoading: imagesLoading } = useQuery<CommunityImage[]>({
     queryKey: ["/api/community-images"],
-    enabled: isAdminData?.isAdmin === true,
   });
 
   const addImageMutation = useMutation({
@@ -116,46 +108,6 @@ export default function Admin() {
     }
     addImageMutation.mutate({ imageUrl, artStyle, aspectRatio });
   };
-
-  if (authLoading || adminCheckLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Shield className="w-5 h-5" />
-              Admin Access Required
-            </CardTitle>
-            <CardDescription>Please sign in to access the admin panel</CardDescription>
-          </CardHeader>
-        </Card>
-      </div>
-    );
-  }
-
-  if (!isAdminData?.isAdmin) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Shield className="w-5 h-5" />
-              Access Denied
-            </CardTitle>
-            <CardDescription>You do not have admin privileges</CardDescription>
-          </CardHeader>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background">
