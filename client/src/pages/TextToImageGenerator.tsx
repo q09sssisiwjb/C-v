@@ -3157,39 +3157,6 @@ const TextToImageGenerator = () => {
                                       Regenerate
                                     </Button>
                                     
-                                    {/* Save Button */}
-                                    <Button
-                                      variant="secondary"
-                                      size="sm"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        saveImage(image);
-                                      }}
-                                      disabled={savingImages.has(image.id) || savedImages.has(image.id)}
-                                      className="h-7 px-2 bg-white/20 hover:bg-white/30 text-white border-0 backdrop-blur-sm disabled:opacity-50"
-                                      data-testid={`button-save-${image.id}`}
-                                      title={
-                                        savingImages.has(image.id) 
-                                          ? "Saving to favorites..." 
-                                          : savedImages.has(image.id) 
-                                            ? "Already saved to favorites" 
-                                            : "Save to favorites"
-                                      }
-                                    >
-                                      {savingImages.has(image.id) ? (
-                                        <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                                      ) : savedImages.has(image.id) ? (
-                                        <Check className="w-3 h-3 mr-1" />
-                                      ) : (
-                                        <Save className="w-3 h-3 mr-1" />
-                                      )}
-                                      {savingImages.has(image.id) 
-                                        ? 'Saving...' 
-                                        : savedImages.has(image.id) 
-                                          ? 'Saved' 
-                                          : 'Save'}
-                                    </Button>
-                                    
                                     {/* Edit Button */}
                                     <Button
                                       variant="secondary"
