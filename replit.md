@@ -18,34 +18,37 @@ The frontend uses React 18 with TypeScript, React Query for server state managem
 Key features include:
 - **AI Image Tools**: Text-to-Image, Image-to-Image, Background Remover, Upscaler, Image-to-Sketch, and Canvas Editor for real-time image generation and manipulation.
 - **Authentication**: Firebase Authentication for email/password and Google OAuth. Admin authentication managed through admins table in database.
-- **Admin Panel**: Admin authentication verification against database-stored admin list. Admin routes verify email against admin table.
-- **Community Showcase**: Display of curated fallback images with filter functionality (no database persistence).
-- **Real-Time Generation**: All images generated in real-time via Google Gemini AI. Images can be downloaded immediately but are not stored in database.
-- **Storage Model**: Minimal database usage - only stores admin accounts. No image persistence, user profiles, favorites, or custom styles stored.
+- **Admin Panel**: Admin authentication verification against database-stored admin list. Admin routes verify email against admin table. Admins can add community images that persist in database.
+- **Community Showcase**: Displays admin-added images from database with filter functionality. Falls back to curated images when database is empty.
+- **Real-Time Generation**: All images generated in real-time via Google Gemini AI. Images can be downloaded immediately.
+- **Storage Model**: Database stores admin accounts and admin-added community images. No user profiles, favorites, or custom styles stored.
 - **API Embed Codes**: Public API page with iframe embed codes for all AI tools, allowing external websites to integrate CreatiVista AI features.
 
 ## System Design Choices
-The application uses a simplified storage abstraction layer with Neon PostgreSQL database storing only admin account data (managed through Drizzle ORM). Firebase Authentication manages user sessions and authentication states for frontend access. The build process uses Vite for the frontend and ESBuild for the backend. The Express server serves both the API and frontend on a single port. All AI generation features work in real-time without database persistence.
+The application uses a simplified storage abstraction layer with Neon PostgreSQL database storing admin accounts and admin-added community images (managed through Drizzle ORM). Firebase Authentication manages user sessions and authentication states for frontend access. The build process uses Vite for the frontend and ESBuild for the backend. The Express server serves both the API and frontend on a single port. All AI generation features work in real-time without user-generated image persistence.
 
 ## Recent Changes (October 19, 2025)
 
-### Database Simplification
-- Removed all database tables except `admins` table
-- Eliminated persistent storage for: images, user profiles, favorites, art styles, custom models, effects, backgrounds
-- Admin authentication still functional via database-stored admin list
-- Application now focuses on real-time generation without persistence
+### Database Configuration (Updated October 19, 2025)
+- **Database Provider**: Neon PostgreSQL (external managed database)
+- **Active Tables**: `admins` and `community_images`
+- **Removed Tables**: user profiles, favorites, art styles, custom models, effects, backgrounds, messages
+- Admin authentication functional via database-stored admin list
+- Admin-added community images persist permanently in database
+- User-generated images (from AI tools) are real-time only without persistence
 
 ### UI Simplification
 - Removed sidebar pages: Effects, Art Styles, My Art Style, Messages, Guides, Settings, Profile, Favorites
 - Updated navigation to show only: Generate, Image-to-Image, Background Remover, Upscaler, Sketch, Canvas, Gallery, Admin Panel, static pages
-- Community Gallery shows curated fallback images instead of database-fetched content
+- Community Gallery displays admin-added images from database, with curated fallback images when empty
 - Updated FAQ page to reflect simplified feature set
 
-### Backend Simplification
-- Removed API routes for image saving, profile management, favorites, art styles, custom models
-- Kept AI generation endpoints: text-to-image, image-to-image, background removal, upscaling, sketch conversion
-- Storage interface now only handles admin CRUD operations
-- All image generation is real-time with no persistence
+### Backend Updates
+- Removed API routes for: profile management, favorites, art styles, custom models
+- Active API routes: text-to-image, image-to-image, background removal, upscaling, sketch conversion, admin community images
+- Storage interface handles: admin CRUD operations, community images CRUD operations
+- Admin-added community images persist in database
+- User-generated AI images are real-time with no persistence
 
 # External Dependencies
 
@@ -97,14 +100,15 @@ The application has been streamlined to focus on real-time AI generation without
 ✅ Backend API responding correctly (health check verified)
 ✅ Vite HMR (Hot Module Replacement) connected and working
 ✅ .gitignore file created for Node.js project
-✅ Database schema simplified to only admins table
+✅ Neon PostgreSQL database configured and connected
+✅ Database schema created with admins and community_images tables
 ✅ Database schema pushed successfully using Drizzle Kit
 ✅ Default admin account configured (eeweed27ai@admin.com)
 ✅ API embed page added with iframe codes for all tools
 ✅ X-Frame-Options header removed to enable iframe embedding on external websites
 ✅ Navigation simplified - removed 8 pages (Favorites, Profile, Settings, Effects, Art Styles, My Art Style, Messages, Guides)
-✅ Community Gallery updated to show curated fallback images
-✅ Backend routes simplified to AI generation only
+✅ Community Gallery updated to display admin-added images from database
+✅ Admin Panel fully functional with persistent image storage
 
 ### Required Environment Variables
 
@@ -124,11 +128,11 @@ To enable full functionality, the following environment variables need to be con
    - `VITE_FIREBASE_MEASUREMENT_ID` (optional)
    - Get from: Firebase Console (https://console.firebase.com)
 
-3. **Database** (Required for admin authentication only):
+3. **Database** (Required for admin authentication and community images):
    - `DATABASE_URL` - Neon PostgreSQL connection string
-   - **Current Status**: ✅ Configured and active
-   - Database now only stores admin accounts
-   - If DATABASE_URL is not available, app falls back to in-memory storage for admins
+   - **Current Status**: ✅ Configured and active (Neon database)
+   - Database stores: admin accounts + admin-added community images
+   - If DATABASE_URL is not available, app falls back to in-memory storage
 
 ### Running the Project
 
@@ -147,8 +151,8 @@ The workflow starts automatically and serves both the frontend and backend API o
 - Backend API routes are prefixed with `/api`
 - The server handles both development (Vite middleware) and production (static files)
 - No separate backend server needed - Express serves everything on port 5000
-- All AI generation is real-time with no database persistence
-- Community Gallery displays curated fallback images without API calls
+- All AI generation is real-time without user-generated image persistence
+- Community Gallery displays admin-added images from database, with curated fallback images when empty
 
 ### Security Considerations
 
