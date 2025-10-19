@@ -12,14 +12,12 @@ import {
 import { Link } from "wouter";
 import {
   Home,
-  LogOut,
   Headphones,
   Image,
   Zap,
   Eraser,
   RefreshCw,
   PenTool,
-  Shield,
   HelpCircle,
   Info,
   Mail,
@@ -31,12 +29,6 @@ import {
   Code,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
-import { UserAvatar } from "@/components/UserAvatar";
-import { logOut } from "@/lib/firebase";
-import { useToast } from "@/hooks/use-toast";
-import { User as FirebaseUser } from "firebase/auth";
-import { useQuery } from "@tanstack/react-query";
 import logoPath from "@assets/CreatiVista-ai-logo_1760010902121.png";
 
 const navigation = [
@@ -64,33 +56,7 @@ const infoPages = [
   { title: "DMCA", url: "/dmca", icon: AlertCircle },
 ];
 
-interface AppSidebarProps {
-  user?: FirebaseUser | null;
-}
-
-export function AppSidebar({ user }: AppSidebarProps) {
-  const { toast } = useToast();
-  
-  const { data: isAdminData } = useQuery<{ isAdmin: boolean }>({
-    queryKey: ["/api/admin/check", user?.email],
-    enabled: !!user?.email,
-  });
-
-  const handleLogout = async () => {
-    try {
-      await logOut();
-      toast({
-        title: "Logged out",
-        description: "You have been successfully logged out.",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Logout failed",
-        description: error.message || "An error occurred during logout.",
-        variant: "destructive",
-      });
-    }
-  };
+export function AppSidebar() {
 
   return (
     <Sidebar>
@@ -119,16 +85,6 @@ export function AppSidebar({ user }: AppSidebarProps) {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
-              {isAdminData?.isAdmin && (
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild data-testid="nav-admin-panel">
-                    <Link href="/admin">
-                      <Shield className="w-4 h-4" />
-                      <span>Admin</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -229,30 +185,6 @@ export function AppSidebar({ user }: AppSidebarProps) {
             </div>
           </div>
         </div>
-        {user && (
-          <>
-            <Separator className="my-3" />
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 px-2">
-                <UserAvatar user={user} className="h-7 w-7" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">
-                    {user.displayName || 'User'}
-                  </p>
-                </div>
-              </div>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="w-full justify-start" 
-                onClick={handleLogout}
-              >
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
-              </Button>
-            </div>
-          </>
-        )}
       </SidebarFooter>
     </Sidebar>
   );

@@ -4,7 +4,6 @@ import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
 import { AppSidebar } from "@/components/app-sidebar";
 import ChatButton from "@/components/ChatButton";
 import Home from "@/pages/Home";
@@ -14,7 +13,6 @@ import ImageToImage from "@/pages/ImageToImage";
 import ImageToSketch from "@/pages/ImageToSketch";
 import BGRemover from "@/pages/BGRemover";
 import Upscale from "@/pages/Upscale";
-import Auth from "@/pages/Auth";
 import Admin from "@/pages/Admin";
 import MoreTools from "@/pages/MoreTools";
 import Support from "@/pages/Support";
@@ -26,8 +24,6 @@ import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import DMCA from "@/pages/DMCA";
 import CanvasEditor from "@/pages/CanvasEditor";
 import API from "@/pages/API";
-import { useAuth } from "@/hooks/useAuth";
-import { UserAvatar } from "@/components/UserAvatar";
 
 function Router() {
   return (
@@ -55,8 +51,6 @@ function Router() {
 }
 
 function TopBar() {
-  const { user, loading } = useAuth();
-
   return (
     <header className="flex items-center justify-between px-4 py-3 border-b">
       <div className="flex items-center gap-3">
@@ -68,29 +62,11 @@ function TopBar() {
           </span>
         </Link>
       </div>
-      
-      <div className="flex items-center gap-2">
-        {!loading && (
-          user ? (
-            <UserAvatar user={user} className="h-8 w-8" />
-          ) : (
-            <>
-              <Button asChild variant="ghost" size="sm" data-testid="button-login">
-                <Link href="/login">Login</Link>
-              </Button>
-              <Button asChild size="sm" data-testid="button-signup">
-                <Link href="/signup">Sign Up</Link>
-              </Button>
-            </>
-          )
-        )}
-      </div>
     </header>
   );
 }
 
 function App() {
-  const { user } = useAuth();
   const sidebarStyle = {
     "--sidebar-width": "16rem",
     "--sidebar-width-icon": "3rem",
@@ -99,35 +75,23 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Switch>
-          <Route path="/login">
-            <Auth />
-            <Toaster />
-          </Route>
-          <Route path="/signup">
-            <Auth />
-            <Toaster />
-          </Route>
-          <Route>
-            <SidebarProvider style={sidebarStyle as React.CSSProperties}>
-              <div className="flex h-screen w-full">
-                <AppSidebar user={user} />
-                <div className="flex flex-col flex-1 overflow-hidden">
-                  <TopBar />
-                  <main className="flex-1 overflow-auto">
-                    <Router />
-                    {/* Adsterra Native Banner Ad */}
-                    <div className="w-full flex justify-center py-4 mt-8">
-                      <div id="container-fcc36959a3b4378011d5b8ab47925cb8"></div>
-                    </div>
-                  </main>
+        <SidebarProvider style={sidebarStyle as React.CSSProperties}>
+          <div className="flex h-screen w-full">
+            <AppSidebar />
+            <div className="flex flex-col flex-1 overflow-hidden">
+              <TopBar />
+              <main className="flex-1 overflow-auto">
+                <Router />
+                {/* Adsterra Native Banner Ad */}
+                <div className="w-full flex justify-center py-4 mt-8">
+                  <div id="container-fcc36959a3b4378011d5b8ab47925cb8"></div>
                 </div>
-              </div>
-              <ChatButton />
-              <Toaster />
-            </SidebarProvider>
-          </Route>
-        </Switch>
+              </main>
+            </div>
+          </div>
+          <ChatButton />
+          <Toaster />
+        </SidebarProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
