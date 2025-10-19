@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { type Image as StoredImage } from '@shared/schema';
 import { 
   Palette, 
   Camera, 
@@ -22,9 +20,17 @@ import {
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 
-// Use the shared schema type for consistency
-type GalleryImage = StoredImage & {
-  createdAt: string; // Convert Date to string for API response
+// Gallery image type (no longer using database)
+type GalleryImage = {
+  id: string;
+  prompt: string;
+  model: string;
+  width: number;
+  height: number;
+  imageData: string;
+  artStyle: string;
+  userDisplayName: string | null;
+  createdAt: string;
 }
 
 // Fallback images for when there are no user-generated images yet
@@ -76,18 +82,10 @@ const CommunityGallery = () => {
     { id: '9:16', label: 'Portrait (9:16)', icon: Smartphone }
   ];
 
-  // Fetch community images using React Query
-  const { data: images = [], isLoading, error, refetch } = useQuery({
-    queryKey: ['community-images'],
-    queryFn: async (): Promise<GalleryImage[]> => {
-      const response = await fetch(`/api/images?limit=${limit}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch images');
-      }
-      return response.json();
-    },
-    staleTime: 30000, // Consider data fresh for 30 seconds
-  });
+  // No longer fetching from database - using default placeholder images only
+  const images: GalleryImage[] = [];
+  const isLoading = false;
+  const error = null;
 
   // Map stored art styles to filter categories
   const mapArtStyleToFilter = (artStyle: string): string => {
@@ -275,27 +273,6 @@ const CommunityGallery = () => {
           
         </div>
 
-        {/* Loading state */}
-        {isLoading && images.length === 0 && (
-          <div className="flex justify-center items-center py-12">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-              <p className="text-muted-foreground">Loading community creations...</p>
-            </div>
-          </div>
-        )}
-
-        {/* Error state */}
-        {error && images.length === 0 && (
-          <div className="flex justify-center items-center py-12">
-            <div className="text-center">
-              <p className="text-muted-foreground mb-4">Unable to load community images</p>
-              <button onClick={() => refetch()} className="px-4 py-2 border border-border rounded-md hover:bg-muted transition-colors">
-                Try Again
-              </button>
-            </div>
-          </div>
-        )}
 
         {/* No results state for active filter */}
         {hasNoFilterResults && (

@@ -12,22 +12,14 @@ import {
 import { Link } from "wouter";
 import {
   Home,
-  BookOpen,
   LogOut,
-  User,
-  Settings,
-  Heart,
-  Wand2,
-  MessageCircle,
   Headphones,
   Image,
   Zap,
   Eraser,
   RefreshCw,
   PenTool,
-  Palette,
   Shield,
-  Sparkles,
   HelpCircle,
   Info,
   Mail,
@@ -45,20 +37,11 @@ import { logOut } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
 import { User as FirebaseUser } from "firebase/auth";
 import { useQuery } from "@tanstack/react-query";
-import { useUserMessages } from "@/hooks/useUserMessages";
 import logoPath from "@assets/CreatiVista-ai-logo_1760010902121.png";
 
 const navigation = [
   { title: "Home", url: "/", icon: Home },
-  { title: "Profile", url: "/profile", icon: User },
-  { title: "Settings", url: "/settings", icon: Settings },
-  { title: "Favorites", url: "/favorites", icon: Heart },
-  { title: "My Art Style", url: "/my-art-style", icon: Palette },
-  { title: "Art Styles", url: "/art-styles", icon: Wand2 },
-  { title: "Effects", url: "/effects", icon: Sparkles },
-  { title: "Messages", url: "/messages", icon: MessageCircle },
   { title: "Support", url: "/support", icon: Headphones },
-  { title: "Guides", url: "/guides", icon: BookOpen },
 ];
 
 const tools = [
@@ -92,8 +75,6 @@ export function AppSidebar({ user }: AppSidebarProps) {
     queryKey: ["/api/admin/check", user?.email],
     enabled: !!user?.email,
   });
-
-  const { unreadCount } = useUserMessages();
 
   const handleLogout = async () => {
     try {
@@ -133,14 +114,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
                   <SidebarMenuButton asChild data-testid={`nav-${item.title.toLowerCase().replace(/\s+/g, '-')}`}>
                     <Link href={item.url}>
                       <item.icon className="w-4 h-4" />
-                      <span className="relative">
-                        {item.title}
-                        {item.title === 'Messages' && unreadCount > 0 && (
-                          <span className="absolute -top-1 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-semibold">
-                            {unreadCount}
-                          </span>
-                        )}
-                      </span>
+                      <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

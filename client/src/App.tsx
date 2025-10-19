@@ -14,15 +14,7 @@ import ImageToImage from "@/pages/ImageToImage";
 import ImageToSketch from "@/pages/ImageToSketch";
 import BGRemover from "@/pages/BGRemover";
 import Upscale from "@/pages/Upscale";
-import Favorites from "@/pages/Favorites";
-import MyArtStyle from "@/pages/MyArtStyle";
-import ArtStyles from "@/pages/ArtStyles";
-import Effects from "@/pages/Effects";
-import Messages from "@/pages/Messages";
-import Profile from "@/pages/Profile";
 import Auth from "@/pages/Auth";
-import Guides from "@/pages/Guides";
-import Settings from "@/pages/Settings";
 import Admin from "@/pages/Admin";
 import MoreTools from "@/pages/MoreTools";
 import Support from "@/pages/Support";
@@ -41,10 +33,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/guides" component={Guides} />
       <Route path="/support" component={Support} />
-      <Route path="/settings" component={Settings} />
-      <Route path="/profile" component={Profile} />
       <Route path="/admin" component={Admin} />
       <Route path="/text-to-image" component={TextToImageGenerator} />
       <Route path="/image-to-image" component={ImageToImage} />
@@ -52,11 +41,6 @@ function Router() {
       <Route path="/canvas-editor" component={CanvasEditor} />
       <Route path="/bg-remover" component={BGRemover} />
       <Route path="/upscale" component={Upscale} />
-      <Route path="/favorites" component={Favorites} />
-      <Route path="/my-art-style" component={MyArtStyle} />
-      <Route path="/art-styles" component={ArtStyles} />
-      <Route path="/effects" component={Effects} />
-      <Route path="/messages" component={Messages} />
       <Route path="/more-tools" component={MoreTools} />
       <Route path="/faq" component={FAQ} />
       <Route path="/terms-and-conditions" component={TermsAndConditions} />
