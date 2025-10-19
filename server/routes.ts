@@ -5,7 +5,7 @@ import { GoogleGenAI } from "@google/genai";
 import { fromZodError } from "zod-validation-error";
 import { generateImageToImage, generateTextToImage } from "./gemini";
 import { generateSupportSystemMessage } from "@shared/features-config";
-import { insertAdminSchema } from "@shared/schema";
+import { insertAdminSchema, insertCommunityImageSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const googleApiKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
@@ -268,6 +268,57 @@ Return only the enhanced prompt, nothing else.`;
       console.error('Error creating admin:', error);
       const errorMessage = error instanceof Error ? error.message : String(error);
       res.status(500).json({ error: "Failed to create admin", details: errorMessage });
+    }
+  });
+
+  app.get("/api/community-images", async (_req, res) => {
+    try {
+      const images = await storage.getAllCommunityImages();
+      res.json(images);
+    } catch (error) {
+      console.error('Error fetching community images:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      res.status(500).json({ error: "Failed to fetch community images", details: errorMessage });
+    }
+  });
+
+  app.post("/api/admin/community-images", async (req, res) => {
+    try {
+      const validation = insertCommunityImageSchema.safeParse(req.body);
+      
+      if (!validation.success) {
+        const errorMessage = fromZodError(validation.error);
+        return res.status(400).json({ 
+          error: "Invalid request data", 
+          details: errorMessage.toString()
+        });
+      }
+
+      const image = await storage.createCommunityImage(validation.data);
+      res.json(image);
+      
+    } catch (error) {
+      console.error('Error creating community image:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      res.status(500).json({ error: "Failed to create community image", details: errorMessage });
+    }
+  });
+
+  app.delete("/api/admin/community-images/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      if (!id) {
+        return res.status(400).json({ error: "Image ID is required" });
+      }
+
+      await storage.deleteCommunityImage(id);
+      res.json({ success: true });
+      
+    } catch (error) {
+      console.error('Error deleting community image:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      res.status(500).json({ error: "Failed to delete community image", details: errorMessage });
     }
   });
 

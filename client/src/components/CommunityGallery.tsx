@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { 
   Palette, 
   Camera, 
@@ -19,6 +20,7 @@ import {
 } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import type { CommunityImage } from '@shared/schema';
 
 // Gallery image type (no longer using database)
 type GalleryImage = {
@@ -58,7 +60,7 @@ const fallbackGalleryItems = [
 const CommunityGallery = () => {
   const limit = 500; // Maximum 500 images
   const [selectedArtStyle, setSelectedArtStyle] = useState<string>('all');
-  const [selectedAspectRatio, setSelectedAspectRatio] = useState<string>('1:1');
+  const [selectedAspectRatio, setSelectedAspectRatio] = useState<string>('all');
 
   // Art style filters
   const artStyleFilters = [
@@ -78,14 +80,18 @@ const CommunityGallery = () => {
 
   // Aspect ratio filters
   const aspectRatioFilters = [
+    { id: 'all', label: 'All Ratios', icon: Square },
     { id: '1:1', label: 'Square (1:1)', icon: Square },
-    { id: '9:16', label: 'Portrait (9:16)', icon: Smartphone }
+    { id: '16:9', label: 'Landscape (16:9)', icon: Smartphone },
+    { id: '4:3', label: 'Standard (4:3)', icon: Square },
+    { id: '9:16', label: 'Portrait (9:16)', icon: Smartphone },
+    { id: '3:4', label: 'Portrait (3:4)', icon: Smartphone }
   ];
 
-  // No longer fetching from database - using default placeholder images only
-  const images: GalleryImage[] = [];
-  const isLoading = false;
-  const error = null;
+  // Fetch community images from admin-added collection
+  const { data: communityImages, isLoading, error } = useQuery<CommunityImage[]>({
+    queryKey: ['/api/community-images'],
+  });
 
   // Map stored art styles to filter categories
   const mapArtStyleToFilter = (artStyle: string): string => {
@@ -136,57 +142,37 @@ const CommunityGallery = () => {
     return 'realistic';
   };
 
-  // Determine aspect ratio from width and height
-  const getAspectRatio = (width: number, height: number): string => {
-    const ratio = width / height;
-    
-    // Check for 1:1 (square) - allow small tolerance
-    if (Math.abs(ratio - 1) < 0.1) {
-      return '1:1';
-    }
-    
-    // Check for 9:16 (portrait) - allow small tolerance
-    if (Math.abs(ratio - (9/16)) < 0.1) {
-      return '9:16';
-    }
-    
-    // Default to 'other' for any other ratios
-    return 'other';
-  };
-
-  // Filter and transform API images to gallery format
-  const transformApiImages = (apiImages: GalleryImage[]) => {
-    const filteredImages = apiImages.filter(img => {
+  // Filter and transform community images to gallery format
+  const transformCommunityImages = (images: CommunityImage[]) => {
+    const filteredImages = images.filter(img => {
       // Filter by art style
       const styleMatch = selectedArtStyle === 'all' || mapArtStyleToFilter(img.artStyle) === selectedArtStyle;
       
       // Filter by aspect ratio
-      const aspectRatio = getAspectRatio(img.width, img.height);
-      const ratioMatch = aspectRatio === selectedAspectRatio;
+      const ratioMatch = selectedAspectRatio === 'all' || img.aspectRatio === selectedAspectRatio;
       
       return styleMatch && ratioMatch;
     });
     
     return filteredImages.map(img => ({
       id: img.id,
-      title: img.prompt.length > 50 ? img.prompt.substring(0, 50) + '...' : img.prompt,
-      author: img.userDisplayName || 'Anonymous',
-      category: img.model,
-      artStyle: img.artStyle, // Include the stored art style
-      image: img.imageData, // This is the base64 data URL
-      alt: `AI-generated: ${img.prompt}`,
-      createdAt: img.createdAt,
-      width: img.width,
-      height: img.height
+      title: img.artStyle,
+      author: 'Community',
+      category: img.artStyle,
+      artStyle: img.artStyle,
+      image: img.imageUrl,
+      alt: `${img.artStyle} - ${img.aspectRatio}`,
+      createdAt: img.createdAt.toString(),
+      aspectRatio: img.aspectRatio
     }));
   };
 
   // Combine real images with fallbacks if needed
-  const transformedImages = images.length > 0 ? transformApiImages(images) : [];
+  const transformedImages = communityImages && communityImages.length > 0 ? transformCommunityImages(communityImages) : [];
   const galleryItems = transformedImages.length > 0 ? transformedImages : fallbackGalleryItems;
   
   // Check if we have no results for current filter
-  const hasNoFilterResults = images.length > 0 && transformedImages.length === 0 && (selectedArtStyle !== 'all' || true);
+  const hasNoFilterResults = communityImages && communityImages.length > 0 && transformedImages.length === 0;
 
 
   const getCategoryColor = (category: string) => {
@@ -307,17 +293,36 @@ const CommunityGallery = () => {
         {galleryItems.length > 0 && !hasNoFilterResults && (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-12 animate-slide-in">
             {galleryItems.map((item) => {
-              // Determine if this is a 9:16 portrait image using exact width/height check
-              const is9to16 = 'width' in item && 'height' in item && Math.abs(item.width * 16 - item.height * 9) <= 1;
-              const containerClass = is9to16 
-                ? "group relative bg-card rounded-xl overflow-hidden border border-border/50 hover:border-primary/30 transition-all duration-300 cursor-pointer" 
-                : "group relative aspect-square bg-card rounded-xl overflow-hidden border border-border/50 hover:border-primary/30 transition-all duration-300 cursor-pointer";
+              // Get aspect ratio styling
+              const getAspectRatioStyle = () => {
+                if ('aspectRatio' in item) {
+                  switch (item.aspectRatio) {
+                    case '9:16':
+                      return { aspectRatio: '9 / 16' };
+                    case '3:4':
+                      return { aspectRatio: '3 / 4' };
+                    case '16:9':
+                      return { aspectRatio: '16 / 9' };
+                    case '4:3':
+                      return { aspectRatio: '4 / 3' };
+                    case '1:1':
+                    default:
+                      return {};
+                  }
+                }
+                return {};
+              };
+              
+              const isSquare = !('aspectRatio' in item) || item.aspectRatio === '1:1';
+              const containerClass = isSquare
+                ? "group relative aspect-square bg-card rounded-xl overflow-hidden border border-border/50 hover:border-primary/30 transition-all duration-300 cursor-pointer"
+                : "group relative bg-card rounded-xl overflow-hidden border border-border/50 hover:border-primary/30 transition-all duration-300 cursor-pointer";
               
               return (
                 <div 
                   key={item.id}
                   className={containerClass}
-                  style={is9to16 && 'width' in item && 'height' in item ? { aspectRatio: `${item.width} / ${item.height}` } : {}}
+                  style={getAspectRatioStyle()}
                   data-testid={`gallery-item-${item.id}`}
                 >
                   <img 
