@@ -46,7 +46,34 @@ interface GeneratedImage {
   height: number;
 }
 
+interface UserArtStyle {
+  id: string;
+  name: string;
+  description?: string;
+  keywords?: string;
+  inspiration?: string;
+  characteristics?: string;
+}
+
+interface CustomModel {
+  id: string;
+  name: string;
+  apiUrl: string;
+}
+
+interface UserCustomEffect {
+  id: string;
+  name: string;
+  description?: string;
+  visualImpact?: string;
+  technicalDetails?: string;
+  useCases?: string;
+}
+
 const TextToImageGenerator = () => {
+  // Temporary: user authentication not yet implemented
+  const user = null as { uid?: string; displayName?: string; email?: string } | null;
+  
   const [prompt, setPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImages, setGeneratedImages] = useState<GeneratedImage[]>([]);
@@ -2018,7 +2045,7 @@ const TextToImageGenerator = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => deleteCustomModel(model.id)}
-                        className="h-7 w-7 p-0 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
+                        className="h-7 w-7 p-0 text-destructive hover:text-destructive hover:bg-destructive/10"
                         data-testid={`button-delete-model-${model.id}`}
                         title="Delete model"
                       >
@@ -3109,7 +3136,7 @@ const TextToImageGenerator = () => {
                                   e.stopPropagation();
                                   deleteImage(image.id);
                                 }}
-                                className="absolute top-2 right-2 h-8 w-8 p-0 bg-red-500/80 hover:bg-red-600 text-white border-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+                                className="absolute top-2 right-2 h-8 w-8 p-0 bg-destructive/80 hover:bg-destructive text-white border-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
                                 data-testid={`button-delete-${image.id}`}
                                 title="Delete image"
                               >

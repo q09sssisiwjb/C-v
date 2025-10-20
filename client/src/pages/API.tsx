@@ -119,13 +119,13 @@ export default function API() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-6 md:py-8 max-w-6xl">
         {/* Header Section */}
         <div className="text-center mb-8 md:mb-12">
           <div className="flex items-center justify-center gap-2 md:gap-3 mb-4">
-            <Code2 className="w-8 h-8 md:w-12 md:h-12 text-purple-600" />
-            <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent" data-testid="text-api-title">
+            <Code2 className="w-8 h-8 md:w-12 md:h-12 text-foreground" />
+            <h1 className="text-2xl md:text-4xl font-bold text-foreground" data-testid="text-api-title">
               CreatiVista AI API
             </h1>
           </div>
@@ -137,25 +137,25 @@ export default function API() {
 
         {/* Features Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
-          <Card className="border-purple-200 dark:border-purple-800">
+          <Card className="border-border">
             <CardHeader className="p-4 md:p-6">
-              <Globe className="w-6 h-6 md:w-8 md:h-8 text-purple-600 mb-2" />
+              <Globe className="w-6 h-6 md:w-8 md:h-8 text-foreground mb-2" />
               <CardTitle className="text-base md:text-lg">Easy Integration</CardTitle>
               <CardDescription className="text-sm">Simple iframe embed codes ready to use</CardDescription>
             </CardHeader>
           </Card>
 
-          <Card className="border-pink-200 dark:border-pink-800">
+          <Card className="border-border">
             <CardHeader className="p-4 md:p-6">
-              <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-pink-600 mb-2" />
+              <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-foreground mb-2" />
               <CardTitle className="text-base md:text-lg">Commercial Use Allowed</CardTitle>
               <CardDescription className="text-sm">Use our tools on any commercial website</CardDescription>
             </CardHeader>
           </Card>
 
-          <Card className="border-purple-200 dark:border-purple-800 sm:col-span-2 md:col-span-1">
+          <Card className="border-border sm:col-span-2 md:col-span-1">
             <CardHeader className="p-4 md:p-6">
-              <Code2 className="w-6 h-6 md:w-8 md:h-8 text-purple-600 mb-2" />
+              <Code2 className="w-6 h-6 md:w-8 md:h-8 text-foreground mb-2" />
               <CardTitle className="text-base md:text-lg">No API Key Needed</CardTitle>
               <CardDescription className="text-sm">Just copy and paste the embed code</CardDescription>
             </CardHeader>
@@ -214,9 +214,9 @@ export default function API() {
                     </Button>
                   </div>
 
-                  <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 md:p-4">
-                    <h4 className="text-sm md:text-base font-semibold text-blue-900 dark:text-blue-300 mb-2">Usage Tips:</h4>
-                    <ul className="list-disc list-inside text-xs md:text-sm text-blue-800 dark:text-blue-400 space-y-1">
+                  <div className="bg-muted border border-border rounded-lg p-3 md:p-4">
+                    <h4 className="text-sm md:text-base font-semibold text-foreground mb-2">Usage Tips:</h4>
+                    <ul className="list-disc list-inside text-xs md:text-sm text-muted-foreground space-y-1">
                       <li>Adjust the width and height to fit your layout</li>
                       <li>The iframe is responsive and works on mobile devices</li>
                       <li>You can customize the border-radius and shadow styling</li>
@@ -230,9 +230,9 @@ export default function API() {
         </Card>
 
         {/* Terms Section */}
-        <Card className="border-green-200 dark:border-green-800 mb-6 md:mb-8">
+        <Card className="border-border mb-6 md:mb-8">
           <CardHeader className="p-4 md:p-6">
-            <CardTitle className="text-base md:text-lg text-green-700 dark:text-green-400">✓ Commercial Use Allowed</CardTitle>
+            <CardTitle className="text-base md:text-lg text-foreground">✓ Commercial Use Allowed</CardTitle>
             <CardDescription className="text-sm md:text-base">
               You are free to use these embed codes on any website, including commercial projects. 
               Our tools are provided as-is for integration purposes. Please ensure your use complies 
@@ -242,9 +242,9 @@ export default function API() {
         </Card>
 
         {/* Technical Details */}
-        <Card className="border-blue-200 dark:border-blue-800">
+        <Card className="border-border">
           <CardHeader className="p-4 md:p-6">
-            <CardTitle className="text-base md:text-lg text-blue-700 dark:text-blue-400">Technical Details</CardTitle>
+            <CardTitle className="text-base md:text-lg text-foreground">Technical Details</CardTitle>
             <CardDescription className="text-sm md:text-base">
               <ul className="list-disc list-inside space-y-2 mt-2">
                 <li><strong>Iframe Support:</strong> All pages are optimized for iframe embedding with no X-Frame-Options restrictions</li>

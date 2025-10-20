@@ -627,7 +627,7 @@ export default function ImageToImage() {
             <Button
               onClick={handleZoomOut}
               size="sm"
-              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground border-0"
               disabled={zoomLevel <= 0.5}
             >
               <ZoomOut className="h-4 w-4" />
@@ -635,14 +635,14 @@ export default function ImageToImage() {
             <Button
               onClick={handleResetZoom}
               size="sm"
-              className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground border-0"
             >
               <RotateCcw className="h-4 w-4" />
             </Button>
             <Button
               onClick={handleZoomIn}
               size="sm"
-              className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground border-0"
               disabled={zoomLevel >= 3}
             >
               <ZoomIn className="h-4 w-4" />
@@ -650,7 +650,7 @@ export default function ImageToImage() {
             <Button
               onClick={handleCloseZoom}
               size="sm"
-              className="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white border-0"
+              className="bg-destructive hover:bg-destructive/90 text-destructive-foreground border-0"
             >
               <X className="h-4 w-4" />
             </Button>

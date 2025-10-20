@@ -72,7 +72,7 @@ const ChatButton = () => {
       <button
         ref={buttonRef}
         onClick={() => setIsMenuOpen(!isMenuOpen)}
-        className={`w-14 h-14 bg-gradient-purple-pink hover:opacity-90 rounded-full flex items-center justify-center shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110 ${isMenuOpen ? 'rotate-45' : 'rotate-0'}`}
+        className={`w-14 h-14 bg-black hover:opacity-90 rounded-full flex items-center justify-center shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110 ${isMenuOpen ? 'rotate-45' : 'rotate-0'}`}
         data-testid="plus-button"
         aria-label="Open tools menu"
       >

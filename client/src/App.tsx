@@ -57,7 +57,7 @@ function TopBar() {
         <SidebarTrigger data-testid="button-sidebar-toggle" />
         <Link href="/" className="flex items-center gap-2">
           <img src="/logo.png" alt="CreatiVista ai Logo" className="h-8 w-8" data-testid="img-logo" />
-          <span className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent" data-testid="text-brand-name">
+          <span className="text-lg font-semibold text-foreground" data-testid="text-brand-name">
             CreatiVista ai
           </span>
         </Link>

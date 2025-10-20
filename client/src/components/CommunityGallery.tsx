@@ -178,13 +178,13 @@ const CommunityGallery = () => {
   const getCategoryColor = (category: string) => {
     const colors = {
       'flux': 'bg-primary/20 text-primary',
-      'flux-schnell': 'bg-blue-500/20 text-blue-400',
-      'flux-real': 'bg-green-500/20 text-green-400',
-      'turbo': 'bg-orange-500/20 text-orange-400',
-      'image-4': 'bg-pink-500/20 text-pink-400',
-      'image-4-ultra': 'bg-red-500/20 text-red-400',
-      'Tutorial': 'bg-gray-500/20 text-gray-400',
-      'Community': 'bg-cyan-500/20 text-cyan-400'
+      'flux-schnell': 'bg-primary/20 text-primary',
+      'flux-real': 'bg-primary/20 text-primary',
+      'turbo': 'bg-primary/20 text-primary',
+      'image-4': 'bg-primary/20 text-primary',
+      'image-4-ultra': 'bg-primary/20 text-primary',
+      'Tutorial': 'bg-muted text-foreground',
+      'Community': 'bg-primary/20 text-primary'
     };
     return colors[category as keyof typeof colors] || 'bg-primary/20 text-primary';
   };
@@ -243,8 +243,8 @@ const CommunityGallery = () => {
                     onClick={() => setSelectedArtStyle(filter.id)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-all duration-200 ${
                       isSelected
-                        ? 'bg-primary text-white hover:bg-primary/90'
-                        : 'bg-card text-white border border-border hover:bg-muted hover:scale-102'
+                        ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                        : 'bg-card text-foreground border border-border hover:bg-muted hover:scale-102'
                     }`}
                     data-testid={`art-style-filter-${filter.id}`}
                   >
