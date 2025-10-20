@@ -132,10 +132,12 @@ Return only the enhanced prompt, nothing else.`;
       const chatHistory = [
         { role: "user", parts: [{ text: systemMessage }] },
         { role: "model", parts: [{ text: "Understood. I'm ready to help with CreatiVista AI support questions. How can I assist you today?" }] },
-        ...history.map((msg: any) => ({
-          role: msg.isUser ? "user" : "model",
-          parts: [{ text: msg.text }]
-        })),
+        ...history
+          .filter((msg: any) => msg.content && msg.content.trim())
+          .map((msg: any) => ({
+            role: msg.role === "user" ? "user" : "model",
+            parts: [{ text: msg.content }]
+          })),
         { role: "user", parts: [{ text: message }] }
       ];
 
@@ -146,7 +148,7 @@ Return only the enhanced prompt, nothing else.`;
 
       const reply = response.text?.trim() || "I apologize, but I'm having trouble generating a response. Please try again.";
 
-      res.json({ reply });
+      res.json({ response: reply });
       
     } catch (error) {
       console.error('Error in support chat:', error);
