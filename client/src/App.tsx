@@ -26,6 +26,25 @@ import CanvasEditor from "@/pages/CanvasEditor";
 import API from "@/pages/API";
 import { useEffect, useState } from "react";
 
+const AdsterraNativeBanner = () => {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.async = true;
+    script.setAttribute('data-cfasync', 'false');
+    script.src = '//pl27831876.effectivegatecpm.com/fcc36959a3b4378011d5b8ab47925cb8/invoke.js';
+    
+    document.body.appendChild(script);
+    
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
+
+  return null;
+};
+
 const AdsterraSocialBar = () => {
   const [isVisible, setIsVisible] = useState(true);
 
@@ -126,6 +145,7 @@ function App() {
           </div>
           <ChatButton />
           <Toaster />
+          <AdsterraNativeBanner />
           <AdsterraSocialBar />
         </SidebarProvider>
       </TooltipProvider>
