@@ -64,9 +64,18 @@ This guide will help you deploy your CreatiVista AI application to Vercel.
 
 The following files have been configured for Vercel deployment:
 
-- **`vercel.json`** - Vercel configuration for routing and builds
-- **`api/index.ts`** - Serverless Express API handler
+- **`vercel.json`** - Vercel configuration for routing and serverless function settings
+- **`api/index.ts`** - Serverless Express API handler (exports Vercel-compatible handler function)
 - **`.vercelignore`** - Files to exclude from deployment
+
+### Key Technical Details
+
+The application uses a **serverless Express pattern** optimized for Vercel:
+
+1. **Handler Function Export**: `api/index.ts` exports a function (not the raw Express app) that Vercel can invoke
+2. **Lazy Route Registration**: Routes are registered on the first request to minimize cold start time
+3. **Type Safety**: Uses `@vercel/node` types for proper TypeScript support
+4. **Memory Configuration**: Configured with 1GB memory in `vercel.json` for optimal performance
 
 ## Database Setup
 
