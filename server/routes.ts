@@ -195,12 +195,12 @@ Return only the enhanced prompt, nothing else.`;
 
   app.post("/api/image-to-image", async (req, res) => {
     try {
-      const { prompt, image } = req.body;
+      const { images, transformPrompt } = req.body;
 
-      if (!prompt || !image) {
+      if (!transformPrompt || !images || !Array.isArray(images) || images.length === 0) {
         return res.status(400).json({
           error: "Missing required fields",
-          details: "Both prompt and image are required"
+          details: "Both transformPrompt and images array are required"
         });
       }
 
@@ -211,7 +211,7 @@ Return only the enhanced prompt, nothing else.`;
         });
       }
 
-      const result = await generateImageToImage(prompt, image);
+      const result = await generateImageToImage(images, transformPrompt);
 
       res.json({
         success: true,
@@ -224,6 +224,47 @@ Return only the enhanced prompt, nothing else.`;
       const errorMessage = error instanceof Error ? error.message : String(error);
       res.status(500).json({
         error: "Failed to generate image-to-image",
+        details: errorMessage
+      });
+    }
+  });
+
+  app.post("/api/sketch-to-image", async (req, res) => {
+    try {
+      const { sketchData, prompt } = req.body;
+
+      if (!sketchData || !prompt) {
+        return res.status(400).json({
+          error: "Missing required fields",
+          details: "Both sketchData and prompt are required"
+        });
+      }
+
+      if (!googleApiKey) {
+        return res.status(503).json({
+          error: "AI service unavailable",
+          details: "Gemini API key not configured"
+        });
+      }
+
+      const images = [{
+        data: sketchData,
+        type: 'image/png'
+      }];
+
+      const result = await generateImageToImage(images, prompt);
+
+      res.json({
+        success: true,
+        imageData: result.imageData,
+        description: result.description
+      });
+
+    } catch (error) {
+      console.error('Error in sketch-to-image generation:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      res.status(500).json({
+        error: "Failed to generate sketch-to-image",
         details: errorMessage
       });
     }
