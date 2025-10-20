@@ -16,7 +16,7 @@ The platform features a clean black and white minimalist UI built with React 18,
 - **Text**: Pure black (#000000)
 - **Buttons**: Black backgrounds with white text
 - **Icons**: White icons on black circular backgrounds
-- **Banner Images**: Grayscale filter applied for monochrome aesthetic
+- **Banner Images**: Colorful (original colors preserved)
 - **User Content**: Community images retain original colors (user-generated content)
 - **Token-based System**: All colors use CSS variables (--primary, --primary-foreground, etc.) for easy theme management
 
@@ -45,7 +45,7 @@ The application uses a simplified storage abstraction layer with Neon PostgreSQL
   - CSS variables in `index.css` - pure black/white semantic colors
   - ToolsSection icons - white icons on black circular backgrounds using `bg-primary` and `text-primary-foreground` tokens
   - TextToImageGenerator - replaced purple buttons (#8a3dff) with black using color tokens
-  - HeroSlider - grayscale filter applied to banner image for monochrome aesthetic
+  - HeroSlider - colorful banner image preserved (user requested to keep original colors)
   - All SVG icons updated to use `text-primary-foreground` token
 - **Maintainable design**: Theme changes can be made by updating CSS variables in one location
 - **No hardcoded colors**: All color classes reference theme tokens for consistency

@@ -119,7 +119,7 @@ const HeroSlider = () => {
           <img 
             src={slide.image}
             alt={slide.alt}
-            className="w-full h-full object-cover grayscale"
+            className="w-full h-full object-cover"
             data-testid="slide-image-0"
           />
         </div>
