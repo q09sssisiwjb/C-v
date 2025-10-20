@@ -9,7 +9,16 @@ Preferred communication style: Simple, everyday language.
 # System Architecture
 
 ## UI/UX Decisions
-The platform features a modern dark-themed UI built with React 18, Tailwind CSS, and shadcn/ui components. It adopts a mobile-first approach with responsive design, utilizes Inter and Space Grotesk fonts, and includes a comprehensive UI component library based on Radix UI primitives. The sidebar navigation provides access to core AI generation tools, admin panel, support pages, and static content pages.
+The platform features a clean black and white minimalist UI built with React 18, Tailwind CSS, and shadcn/ui components. The design uses a token-based color system with CSS variables for maintainability. It adopts a mobile-first approach with responsive design, utilizes Inter and Space Grotesk fonts, and includes a comprehensive UI component library based on Radix UI primitives. The sidebar navigation provides access to core AI generation tools, admin panel, support pages, and static content pages.
+
+**Color Theme (Updated October 20, 2025)**:
+- **Background**: Pure white (#FFFFFF)
+- **Text**: Pure black (#000000)
+- **Buttons**: Black backgrounds with white text
+- **Icons**: White icons on black circular backgrounds
+- **Banner Images**: Grayscale filter applied for monochrome aesthetic
+- **User Content**: Community images retain original colors (user-generated content)
+- **Token-based System**: All colors use CSS variables (--primary, --primary-foreground, etc.) for easy theme management
 
 ## Technical Implementations
 The frontend uses React 18 with TypeScript, React Query for server state management, and Wouter for routing. Vite handles frontend development and builds. The backend is an Express.js server with TypeScript, following a RESTful API design, operating on Node.js 18+ with ESM modules. It includes centralized route registration, global error handling, and custom logging middleware.
@@ -27,9 +36,23 @@ Key features include:
 ## System Design Choices
 The application uses a simplified storage abstraction layer with Neon PostgreSQL database storing admin accounts and admin-added community images (managed through Drizzle ORM). Firebase Authentication manages user sessions and authentication states for frontend access. The build process uses Vite for the frontend and ESBuild for the backend. The Express server serves both the API and frontend on a single port. All AI generation features work in real-time without user-generated image persistence.
 
-## Recent Changes (October 19, 2025)
+## Recent Changes
 
-### Database Configuration (Updated October 19, 2025)
+### Black and White Theme Implementation (October 20, 2025)
+- **Complete color system overhaul**: Converted entire UI from purple/colored theme to clean black and white design
+- **Token-based approach**: All colors now use CSS variables instead of hardcoded values for maintainability
+- **Updated components**:
+  - CSS variables in `index.css` - pure black/white semantic colors
+  - ToolsSection icons - white icons on black circular backgrounds using `bg-primary` and `text-primary-foreground` tokens
+  - TextToImageGenerator - replaced purple buttons (#8a3dff) with black using color tokens
+  - HeroSlider - grayscale filter applied to banner image for monochrome aesthetic
+  - All SVG icons updated to use `text-primary-foreground` token
+- **Maintainable design**: Theme changes can be made by updating CSS variables in one location
+- **No hardcoded colors**: All color classes reference theme tokens for consistency
+
+### Database Simplification (October 19, 2025)
+
+### Database Configuration
 - **Database Provider**: Neon PostgreSQL (external managed database)
 - **Active Tables**: `admins` and `community_images`
 - **Removed Tables**: user profiles, favorites, art styles, custom models, effects, backgrounds, messages
