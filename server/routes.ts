@@ -253,8 +253,8 @@ Return only the enhanced prompt, nothing else.`;
       }];
 
       const transformPrompt = prompt && prompt.trim() 
-        ? prompt.trim() 
-        : "Convert this sketch into a realistic, high-quality image with natural colors and lighting";
+        ? `This is a hand-drawn sketch. Convert it into a realistic, high-quality photograph based on this sketch. ${prompt.trim()}. Maintain the composition and structure from the sketch while making it photorealistic.`
+        : "This is a hand-drawn sketch. Convert it into a realistic, high-quality photograph with natural colors, proper lighting, and photorealistic details. Maintain the composition and structure from the sketch.";
 
       const result = await generateImageToImage(images, transformPrompt);
 
