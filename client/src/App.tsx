@@ -24,23 +24,38 @@ import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import DMCA from "@/pages/DMCA";
 import CanvasEditor from "@/pages/CanvasEditor";
 import API from "@/pages/API";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const AdsterraSocialBar = () => {
+  const [isVisible, setIsVisible] = useState(true);
+
   useEffect(() => {
+    if (!isVisible) return;
+
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = '//pl27831772.effectivegatecpm.com/17/0e/67/170e67842e34ff156ec9833bd5088524.js';
     script.async = true;
     
     document.body.appendChild(script);
+
+    // Hide the ad after 1 minute (60000 milliseconds)
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+      // Remove any ad elements that might have been created by the script
+      const adElements = document.querySelectorAll('[id*="adsterra"], [class*="adsterra"]');
+      adElements.forEach(el => el.remove());
+    }, 60000);
     
     return () => {
+      clearTimeout(timer);
       if (document.body.contains(script)) {
         document.body.removeChild(script);
       }
     };
-  }, []);
+  }, [isVisible]);
+
+  if (!isVisible) return null;
 
   return null;
 };
