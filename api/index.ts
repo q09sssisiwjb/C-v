@@ -54,11 +54,31 @@ app.use((req, res, next) => {
   next();
 });
 
-// Register all routes from server/routes.ts
-// Note: registerRoutes returns a Server, but we only need the app for Vercel
-(async () => {
-  await registerRoutes(app);
-})();
+// Initialize routes synchronously
+let routesRegistered = false;
+let routesPromise: Promise<void> | null = null;
+
+const initializeRoutes = async () => {
+  if (!routesRegistered && !routesPromise) {
+    routesPromise = registerRoutes(app).then(() => {
+      routesRegistered = true;
+    });
+  }
+  return routesPromise;
+};
+
+// Middleware to ensure routes are registered before handling requests
+app.use(async (req, res, next) => {
+  if (!routesRegistered) {
+    try {
+      await initializeRoutes();
+    } catch (error) {
+      console.error('Failed to initialize routes:', error);
+      return res.status(500).json({ error: 'Server initialization failed' });
+    }
+  }
+  next();
+});
 
 // Error handler
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
