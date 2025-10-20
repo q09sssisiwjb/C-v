@@ -122,12 +122,26 @@ const tools = [
 const AdBanner = () => {
   const mobileAdRef = useRef<HTMLDivElement>(null);
   const desktopAdRef = useRef<HTMLDivElement>(null);
+  const loadedRef = useRef(false);
 
   useEffect(() => {
-    // Load mobile ad script
-    if (mobileAdRef.current && !mobileAdRef.current.hasChildNodes()) {
+    if (loadedRef.current) return;
+    loadedRef.current = true;
+
+    // Preconnect to ad server for faster loading
+    const preconnect = document.createElement('link');
+    preconnect.rel = 'preconnect';
+    preconnect.href = 'https://www.highperformanceformat.com';
+    document.head.appendChild(preconnect);
+
+    // Load both ads in parallel for faster loading
+    const isMobile = window.innerWidth < 768;
+
+    if (isMobile && mobileAdRef.current) {
+      // Mobile ad
       const mobileScript = document.createElement('script');
       mobileScript.type = 'text/javascript';
+      mobileScript.async = true;
       mobileScript.innerHTML = `
         atOptions = {
           'key' : 'cb0fcd15f1cc600221094578455852a9',
@@ -140,16 +154,16 @@ const AdBanner = () => {
       
       const mobileInvokeScript = document.createElement('script');
       mobileInvokeScript.type = 'text/javascript';
+      mobileInvokeScript.async = true;
       mobileInvokeScript.src = '//www.highperformanceformat.com/cb0fcd15f1cc600221094578455852a9/invoke.js';
       
       mobileAdRef.current.appendChild(mobileScript);
       mobileAdRef.current.appendChild(mobileInvokeScript);
-    }
-
-    // Load desktop ad script
-    if (desktopAdRef.current && !desktopAdRef.current.hasChildNodes()) {
+    } else if (!isMobile && desktopAdRef.current) {
+      // Desktop ad
       const desktopScript = document.createElement('script');
       desktopScript.type = 'text/javascript';
+      desktopScript.async = true;
       desktopScript.innerHTML = `
         atOptions = {
           'key' : '4f719b8be7c355f105aad5d9ecc3ad4a',
@@ -162,6 +176,7 @@ const AdBanner = () => {
       
       const desktopInvokeScript = document.createElement('script');
       desktopInvokeScript.type = 'text/javascript';
+      desktopInvokeScript.async = true;
       desktopInvokeScript.src = '//www.highperformanceformat.com/4f719b8be7c355f105aad5d9ecc3ad4a/invoke.js';
       
       desktopAdRef.current.appendChild(desktopScript);
