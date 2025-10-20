@@ -70,12 +70,12 @@ The following files have been configured for Vercel deployment:
 
 ### Key Technical Details
 
-The application uses a **serverless Express pattern** optimized for Vercel:
+The application uses a **hybrid deployment pattern** optimized for Vercel:
 
-1. **Handler Function Export**: `api/index.ts` exports a function (not the raw Express app) that Vercel can invoke
-2. **Lazy Route Registration**: Routes are registered on the first request to minimize cold start time
-3. **Type Safety**: Uses `@vercel/node` types for proper TypeScript support
-4. **Memory Configuration**: Configured with 1GB memory in `vercel.json` for optimal performance
+1. **Static File Serving**: Frontend assets (`dist/public/`) served directly by Vercel's CDN
+2. **Serverless API**: Backend API routes handled by serverless function at `api/index.ts`
+3. **Route Configuration**: Smart routing directs `/api/*` to serverless functions, everything else to static files
+4. **Lazy Initialization**: Routes are registered on first request to minimize cold start time
 
 ## Database Setup
 
