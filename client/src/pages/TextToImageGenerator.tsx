@@ -2384,7 +2384,7 @@ const TextToImageGenerator = () => {
                                 effect === customEffect.name ? "opacity-100" : "opacity-0"
                               }`}
                             />
-                            <Sparkles className="mr-2 h-4 w-4 text-purple-500" />
+                            <Sparkles className="mr-2 h-4 w-4 text-primary" />
                             {customEffect.name}
                           </CommandItem>
                         ))}
@@ -2980,7 +2980,7 @@ const TextToImageGenerator = () => {
             <TabsList className="grid w-fit grid-cols-2 bg-muted/50">
               <TabsTrigger 
                 value="image" 
-                className="data-[state=active]:bg-[#8a3dff] data-[state=active]:text-white"
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
                 data-testid="tab-image"
               >
                 <ImageIcon className="w-4 h-4 mr-2" />
@@ -3060,7 +3060,7 @@ const TextToImageGenerator = () => {
                         <Button
                           onClick={() => generateImage()}
                           disabled={isGenerating || !prompt.trim()}
-                          className="bg-[#8a3dff] hover:bg-[#7c36e6] text-white px-6"
+                          className="bg-primary hover:bg-primary/90 text-primary-foreground px-6"
                           data-testid="button-generate"
                         >
                           {isGenerating ? (
@@ -3085,8 +3085,8 @@ const TextToImageGenerator = () => {
                         <div className="w-24 h-24 bg-muted/50 rounded-lg border-2 border-dashed border-muted-foreground/30 flex items-center justify-center">
                           <ImageIcon className="w-8 h-8 text-muted-foreground/50" />
                         </div>
-                        <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-[#8a3dff] rounded-full flex items-center justify-center">
-                          <Send className="w-4 h-4 text-white" />
+                        <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                          <Send className="w-4 h-4 text-primary-foreground" />
                         </div>
                       </div>
                       <h3 className="text-lg font-medium text-muted-foreground mb-2">
