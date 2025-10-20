@@ -1,5 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "../server/routes";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 const app = express();
 
@@ -54,32 +55,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Initialize routes synchronously
-let routesRegistered = false;
-let routesPromise: Promise<void> | null = null;
-
-const initializeRoutes = async () => {
-  if (!routesRegistered && !routesPromise) {
-    routesPromise = registerRoutes(app).then(() => {
-      routesRegistered = true;
-    });
-  }
-  return routesPromise;
-};
-
-// Middleware to ensure routes are registered before handling requests
-app.use(async (req, res, next) => {
-  if (!routesRegistered) {
-    try {
-      await initializeRoutes();
-    } catch (error) {
-      console.error('Failed to initialize routes:', error);
-      return res.status(500).json({ error: 'Server initialization failed' });
-    }
-  }
-  next();
-});
-
 // Error handler
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   const status = err.status || err.statusCode || 500;
@@ -88,5 +63,36 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   console.error(`Error: ${status} - ${message}`);
 });
 
-// Export the Express app for Vercel serverless
-export default app;
+// Initialize routes once on first request
+let routesRegistered = false;
+let routesPromise: Promise<void> | null = null;
+
+const initializeRoutes = async () => {
+  if (!routesRegistered && !routesPromise) {
+    routesPromise = registerRoutes(app).then(() => {
+      routesRegistered = true;
+      console.log('Routes registered successfully');
+    }).catch((error) => {
+      console.error('Failed to register routes:', error);
+      routesPromise = null;
+      throw error;
+    });
+  }
+  return routesPromise;
+};
+
+// Export a handler function for Vercel serverless
+export default async (req: VercelRequest, res: VercelResponse) => {
+  try {
+    // Ensure routes are registered before handling any request
+    if (!routesRegistered) {
+      await initializeRoutes();
+    }
+    
+    // Pass the request to Express
+    app(req as any, res as any);
+  } catch (error) {
+    console.error('Handler error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
