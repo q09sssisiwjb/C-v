@@ -38,6 +38,13 @@ The application uses a simplified storage abstraction layer with Neon PostgreSQL
 
 ## Recent Changes
 
+### Gemini API Endpoint Fixes (October 20, 2025)
+- **Fixed `/api/image-to-image` endpoint**: Corrected parameter names from `{ prompt, image }` to `{ images, transformPrompt }` to match frontend expectations
+- **Updated function calls**: Fixed argument order to `generateImageToImage(images, transformPrompt)` matching the function signature in `server/gemini.ts`
+- **Created `/api/sketch-to-image` endpoint**: Added missing endpoint for canvas editor sketch-to-realistic-image conversion
+- **Improved validation**: Added array validation for images parameter and proper error handling for both endpoints
+- Both Canvas Editor and Image-to-Image pages now work correctly with the Gemini API
+
 ### Black and White Theme Implementation (October 20, 2025)
 - **Complete color system overhaul**: Converted entire UI from purple/colored theme to clean black and white design
 - **Token-based approach**: All colors now use CSS variables instead of hardcoded values for maintainability
