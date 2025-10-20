@@ -528,6 +528,28 @@ const TextToImageGenerator = () => {
   const [newCustomStyle, setNewCustomStyle] = useState('');
   const [showCustomStyleInput, setShowCustomStyleInput] = useState(false);
   
+  // Local custom models state (localStorage)
+  const [localCustomModels, setLocalCustomModels] = useState<CustomModel[]>([]);
+  
+  // Local custom effects state (localStorage)
+  interface LocalCustomEffect {
+    id: string;
+    name: string;
+    description?: string;
+    visualImpact?: string;
+    technicalDetails?: string;
+    useCases?: string;
+  }
+  const [localCustomEffects, setLocalCustomEffects] = useState<LocalCustomEffect[]>([]);
+  
+  // Custom options state for localStorage
+  const [customPlaces, setCustomPlaces] = useState<string[]>([]);
+  const [customAspectRatios, setCustomAspectRatios] = useState<{ name: string; width: number; height: number }[]>([]);
+  const [customBackgrounds, setCustomBackgrounds] = useState<string[]>([]);
+  const [customSkies, setCustomSkies] = useState<string[]>([]);
+  const [customWeathers, setCustomWeathers] = useState<string[]>([]);
+  const [customExpressions, setCustomExpressions] = useState<string[]>([]);
+  
   // Database art styles
   const { data: databaseArtStyles = [], isLoading: isLoadingDbStyles } = useQuery<UserArtStyle[]>({
     queryKey: ['/api/user-art-styles', user?.uid],
@@ -555,6 +577,9 @@ const TextToImageGenerator = () => {
       return response.json();
     },
   });
+  
+  // Combine database and local custom models
+  const allCustomModels = [...customModels, ...localCustomModels];
   
   // Custom model dialog state
   const [showCustomModelDialog, setShowCustomModelDialog] = useState(false);
@@ -603,6 +628,9 @@ const TextToImageGenerator = () => {
       return response.json();
     },
   });
+  
+  // Combine database and local custom effects
+  const allCustomEffects = [...databaseCustomEffects, ...localCustomEffects];
 
   // Adsterra social bar ad loader
   const loadAdsterraSocialBar = () => {
@@ -618,7 +646,7 @@ const TextToImageGenerator = () => {
     };
   }, []);
 
-  // Load custom art styles from localStorage on mount
+  // Load all custom options from localStorage on mount
   useEffect(() => {
     const savedCustomStyles = localStorage.getItem('customArtStyles');
     if (savedCustomStyles) {
@@ -629,6 +657,54 @@ const TextToImageGenerator = () => {
     const savedCustomStylesInfo = localStorage.getItem('customArtStylesInfo');
     if (savedCustomStylesInfo) {
       setCustomStylesInfo(JSON.parse(savedCustomStylesInfo));
+    }
+    
+    // Load custom models from localStorage
+    const savedCustomModels = localStorage.getItem('localCustomModels');
+    if (savedCustomModels) {
+      setLocalCustomModels(JSON.parse(savedCustomModels));
+    }
+    
+    // Load custom effects from localStorage
+    const savedCustomEffects = localStorage.getItem('localCustomEffects');
+    if (savedCustomEffects) {
+      setLocalCustomEffects(JSON.parse(savedCustomEffects));
+    }
+    
+    // Load custom places from localStorage
+    const savedCustomPlaces = localStorage.getItem('customPlaces');
+    if (savedCustomPlaces) {
+      setCustomPlaces(JSON.parse(savedCustomPlaces));
+    }
+    
+    // Load custom aspect ratios from localStorage
+    const savedCustomAspectRatios = localStorage.getItem('customAspectRatios');
+    if (savedCustomAspectRatios) {
+      setCustomAspectRatios(JSON.parse(savedCustomAspectRatios));
+    }
+    
+    // Load custom backgrounds from localStorage
+    const savedCustomBackgrounds = localStorage.getItem('customBackgrounds');
+    if (savedCustomBackgrounds) {
+      setCustomBackgrounds(JSON.parse(savedCustomBackgrounds));
+    }
+    
+    // Load custom skies from localStorage
+    const savedCustomSkies = localStorage.getItem('customSkies');
+    if (savedCustomSkies) {
+      setCustomSkies(JSON.parse(savedCustomSkies));
+    }
+    
+    // Load custom weathers from localStorage
+    const savedCustomWeathers = localStorage.getItem('customWeathers');
+    if (savedCustomWeathers) {
+      setCustomWeathers(JSON.parse(savedCustomWeathers));
+    }
+    
+    // Load custom expressions from localStorage
+    const savedCustomExpressions = localStorage.getItem('customExpressions');
+    if (savedCustomExpressions) {
+      setCustomExpressions(JSON.parse(savedCustomExpressions));
     }
     
     // Check for selected art style from My Art Style page
@@ -676,6 +752,46 @@ const TextToImageGenerator = () => {
   useEffect(() => {
     localStorage.setItem('customArtStylesInfo', JSON.stringify(customStylesInfo));
   }, [customStylesInfo]);
+  
+  // Save local custom models to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('localCustomModels', JSON.stringify(localCustomModels));
+  }, [localCustomModels]);
+  
+  // Save local custom effects to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('localCustomEffects', JSON.stringify(localCustomEffects));
+  }, [localCustomEffects]);
+  
+  // Save custom places to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('customPlaces', JSON.stringify(customPlaces));
+  }, [customPlaces]);
+  
+  // Save custom aspect ratios to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('customAspectRatios', JSON.stringify(customAspectRatios));
+  }, [customAspectRatios]);
+  
+  // Save custom backgrounds to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('customBackgrounds', JSON.stringify(customBackgrounds));
+  }, [customBackgrounds]);
+  
+  // Save custom skies to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('customSkies', JSON.stringify(customSkies));
+  }, [customSkies]);
+  
+  // Save custom weathers to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('customWeathers', JSON.stringify(customWeathers));
+  }, [customWeathers]);
+  
+  // Save custom expressions to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('customExpressions', JSON.stringify(customExpressions));
+  }, [customExpressions]);
 
   // Handle URL parameter for pre-selecting an effect
   useEffect(() => {
@@ -788,7 +904,7 @@ const TextToImageGenerator = () => {
   const getModelDisplayName = (modelId: string): string => {
     if (modelId.startsWith('custom-')) {
       const customModelId = modelId.replace('custom-', '');
-      const customModel = customModels.find(m => m.id === customModelId);
+      const customModel = allCustomModels.find(m => m.id === customModelId);
       return customModel ? customModel.name : modelId;
     }
     
@@ -807,15 +923,6 @@ const TextToImageGenerator = () => {
 
   // Function to save custom model
   const saveCustomModel = async () => {
-    if (!user?.uid) {
-      toast({
-        title: "Sign in required",
-        description: "Please sign in to save custom models.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     // Validation based on model type
     if (!customModelName.trim() || !customModelUrl.trim()) {
       toast({
@@ -828,30 +935,50 @@ const TextToImageGenerator = () => {
 
     setIsSavingCustomModel(true);
     try {
-      const response = await fetch('/api/custom-models', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: user.uid,
-          name: customModelName.trim(),
-          modelType: customModelType,
-          apiUrl: customModelUrl.trim(),
-          apiKey: customModelApiKey.trim() || null,
-          requestFormat: 'standard',
-          isActive: true,
-        }),
-      });
+      const newModel: CustomModel = {
+        id: `local-${Date.now()}`,
+        name: customModelName.trim(),
+        apiUrl: customModelUrl.trim(),
+      };
 
-      if (!response.ok) {
-        throw new Error('Failed to save custom model');
+      // If user is logged in, save to database
+      if (user?.uid) {
+        const response = await fetch('/api/custom-models', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: user.uid,
+            name: customModelName.trim(),
+            modelType: customModelType,
+            apiUrl: customModelUrl.trim(),
+            apiKey: customModelApiKey.trim() || null,
+            requestFormat: 'standard',
+            isActive: true,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to save custom model');
+        }
+
+        toast({
+          title: "Custom model added!",
+          description: `"${customModelName}" has been saved to your account and is ready to use.`,
+        });
+
+        // Refetch custom models from database
+        refetchCustomModels();
+      } else {
+        // Save locally for unauthenticated users
+        setLocalCustomModels([...localCustomModels, newModel]);
+        
+        toast({
+          title: "Custom model added!",
+          description: `"${customModelName}" has been saved locally. Sign in to save to your account.`,
+        });
       }
-
-      toast({
-        title: "Custom model added!",
-        description: `"${customModelName}" has been saved and is ready to use.`,
-      });
 
       // Reset form and close dialog
       setCustomModelType('huggingface');
@@ -859,9 +986,6 @@ const TextToImageGenerator = () => {
       setCustomModelUrl('');
       setCustomModelApiKey('');
       setShowCustomModelDialog(false);
-
-      // Refetch custom models
-      refetchCustomModels();
     } catch (error) {
       console.error('Error saving custom model:', error);
       toast({
@@ -876,15 +1000,6 @@ const TextToImageGenerator = () => {
 
   // Function to save custom effect
   const saveCustomEffect = async () => {
-    if (!user?.uid) {
-      toast({
-        title: "Sign in required",
-        description: "Please sign in to save custom effects.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     if (!customEffectName.trim()) {
       toast({
         title: "Name required",
@@ -896,29 +1011,52 @@ const TextToImageGenerator = () => {
 
     setIsSavingCustomEffect(true);
     try {
-      const response = await fetch('/api/user-custom-effects', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: user.uid,
-          name: customEffectName.trim(),
-          description: customEffectDescription.trim() || null,
-          visualImpact: customEffectVisualImpact.trim() || null,
-          technicalDetails: customEffectTechnicalDetails.trim() || null,
-          useCases: customEffectUseCases.trim() || null,
-        }),
-      });
+      const newEffect: LocalCustomEffect = {
+        id: `local-${Date.now()}`,
+        name: customEffectName.trim(),
+        description: customEffectDescription.trim() || undefined,
+        visualImpact: customEffectVisualImpact.trim() || undefined,
+        technicalDetails: customEffectTechnicalDetails.trim() || undefined,
+        useCases: customEffectUseCases.trim() || undefined,
+      };
 
-      if (!response.ok) {
-        throw new Error('Failed to save custom effect');
+      // If user is logged in, save to database
+      if (user?.uid) {
+        const response = await fetch('/api/user-custom-effects', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: user.uid,
+            name: customEffectName.trim(),
+            description: customEffectDescription.trim() || null,
+            visualImpact: customEffectVisualImpact.trim() || null,
+            technicalDetails: customEffectTechnicalDetails.trim() || null,
+            useCases: customEffectUseCases.trim() || null,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to save custom effect');
+        }
+
+        toast({
+          title: "Custom effect created!",
+          description: `"${customEffectName}" has been saved to your account and is ready to use.`,
+        });
+
+        // Refetch custom effects from database
+        refetchCustomEffects();
+      } else {
+        // Save locally for unauthenticated users
+        setLocalCustomEffects([...localCustomEffects, newEffect]);
+        
+        toast({
+          title: "Custom effect created!",
+          description: `"${customEffectName}" has been saved locally. Sign in to save to your account.`,
+        });
       }
-
-      toast({
-        title: "Custom effect created!",
-        description: `"${customEffectName}" has been saved and is ready to use.`,
-      });
 
       // Reset form and close dialog
       setCustomEffectName('');
@@ -927,9 +1065,6 @@ const TextToImageGenerator = () => {
       setCustomEffectTechnicalDetails('');
       setCustomEffectUseCases('');
       setShowCustomEffectDialog(false);
-
-      // Refetch custom effects
-      refetchCustomEffects();
     } catch (error) {
       console.error('Error saving custom effect:', error);
       toast({
@@ -944,24 +1079,34 @@ const TextToImageGenerator = () => {
 
   // Function to delete custom model
   const deleteCustomModel = async (modelId: string) => {
-    if (!user?.uid) return;
-
     try {
-      const response = await fetch(`/api/custom-models/${modelId}`, {
-        method: 'DELETE',
-      });
+      // Check if it's a local model
+      if (modelId.startsWith('local-')) {
+        // Delete from local storage
+        setLocalCustomModels(localCustomModels.filter(m => m.id !== modelId));
+        
+        toast({
+          title: "Model deleted",
+          description: "Custom model has been removed from local storage.",
+        });
+      } else if (user?.uid) {
+        // Delete from database if user is logged in
+        const response = await fetch(`/api/custom-models/${modelId}`, {
+          method: 'DELETE',
+        });
 
-      if (!response.ok) {
-        throw new Error('Failed to delete custom model');
+        if (!response.ok) {
+          throw new Error('Failed to delete custom model');
+        }
+
+        toast({
+          title: "Model deleted",
+          description: "Custom model has been removed from your account.",
+        });
+
+        // Refetch custom models from database
+        refetchCustomModels();
       }
-
-      toast({
-        title: "Model deleted",
-        description: "Custom model has been removed.",
-      });
-
-      // Refetch custom models
-      refetchCustomModels();
 
       // Reset selected model if it was deleted
       if (selectedModel === `custom-${modelId}`) {
@@ -980,6 +1125,21 @@ const TextToImageGenerator = () => {
   // Combined art styles for dropdown (predefined + custom + database)
   const databaseStyleNames = databaseArtStyles.map(style => style.name);
   const allArtStyles = [...artStyles, ...customArtStyles, ...databaseStyleNames];
+  
+  // Combined places (predefined + custom)
+  const allPlaces = [...places, ...customPlaces];
+  
+  // Combined backgrounds (predefined + custom)
+  const allBackgrounds = [...backgrounds, ...customBackgrounds];
+  
+  // Combined skies (predefined + custom)
+  const allSkies = [...skies, ...customSkies];
+  
+  // Combined weather (predefined + custom)
+  const allWeather = [...weathers, ...customWeathers];
+  
+  // Combined expressions (predefined + custom)
+  const allExpressions = [...expressions, ...customExpressions];
 
   // Simplified configuration
   const guidance = '7.5';
@@ -1164,15 +1324,15 @@ const TextToImageGenerator = () => {
     
     // Add effect if selected (with enhanced information for custom effects)
     if (effect && effect.trim()) {
-      const isDatabaseEffect = databaseCustomEffects.find(dbEffect => dbEffect.name === effect);
+      const customEffect = allCustomEffects.find(eff => eff.name === effect);
       
-      if (isDatabaseEffect) {
-        // Use detailed information for database custom effects with sanitization and length limits
+      if (customEffect) {
+        // Use detailed information for custom effects with sanitization and length limits
         const effectInfo = {
-          description: isDatabaseEffect.description || '',
-          visualImpact: isDatabaseEffect.visualImpact || '',
-          technicalDetails: isDatabaseEffect.technicalDetails || '',
-          useCases: isDatabaseEffect.useCases || ''
+          description: customEffect.description || '',
+          visualImpact: customEffect.visualImpact || '',
+          technicalDetails: customEffect.technicalDetails || '',
+          useCases: customEffect.useCases || ''
         };
         
         let effectPrompt = `, with ${effect} effect`;
@@ -2060,10 +2220,10 @@ const TextToImageGenerator = () => {
                   <SelectItem value="flux-real">Flux-Real</SelectItem>
                   <SelectItem value="flux">Flux (fast)</SelectItem>
                   <SelectItem value="turbo">Turbo</SelectItem>
-                  {customModels.length > 0 && (
+                  {allCustomModels.length > 0 && (
                     <>
                       <SelectItem value="divider" disabled>---Custom Models---</SelectItem>
-                      {customModels.map(model => (
+                      {allCustomModels.map(model => (
                         <SelectItem key={model.id} value={`custom-${model.id}`}>
                           {model.name}
                         </SelectItem>
@@ -2076,14 +2236,6 @@ const TextToImageGenerator = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => {
-                  if (!user?.uid) {
-                    toast({
-                      title: "Sign in required",
-                      description: "Please sign in to add custom models.",
-                      variant: "destructive",
-                    });
-                    return;
-                  }
                   // Open Adsterra ad first
                   window.open('https://www.effectivegatecpm.com/qaiazg2t?key=4c4142eeaa9cc8ccb9790d18dd0ce03c', '_blank');
                   loadAdsterraSocialBar();
@@ -2092,7 +2244,7 @@ const TextToImageGenerator = () => {
                 }}
                 className="w-full mt-2 text-xs"
                 data-testid="button-add-custom-model"
-                title={!user?.uid ? "Sign in required to add custom models" : "Add a custom model"}
+                title="Add a custom model"
               >
                 <Zap className="w-3 h-3 mr-1" />
                 Add Custom Model
@@ -2100,11 +2252,11 @@ const TextToImageGenerator = () => {
             </div>
 
             {/* Manage Custom Models */}
-            {customModels.length > 0 && (
+            {allCustomModels.length > 0 && (
               <div className="space-y-2">
                 <Label>Your Custom Models</Label>
                 <div className="space-y-2 max-h-40 overflow-y-auto">
-                  {customModels.map(model => (
+                  {allCustomModels.map(model => (
                     <div key={model.id} className="flex items-center justify-between p-2 bg-muted/50 rounded-md">
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium truncate">{model.name}</p>
@@ -2222,7 +2374,7 @@ const TextToImageGenerator = () => {
                           />
                           Custom Place
                         </CommandItem>
-                        {places.map((placeOption) => (
+                        {allPlaces.map((placeOption) => (
                           <CommandItem
                             key={placeOption}
                             value={placeOption}
@@ -2247,13 +2399,31 @@ const TextToImageGenerator = () => {
                 </PopoverContent>
               </Popover>
               {isCustomPlace && (
-                <Input
-                  placeholder="Enter your custom place..."
-                  value={customPlace}
-                  onChange={(e) => setCustomPlace(e.target.value)}
-                  data-testid="input-custom-place"
-                  className="mt-2"
-                />
+                <div className="flex gap-2 mt-2">
+                  <Input
+                    placeholder="Enter your custom place..."
+                    value={customPlace}
+                    onChange={(e) => setCustomPlace(e.target.value)}
+                    data-testid="input-custom-place"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      if (customPlace.trim() && !customPlaces.includes(customPlace.trim())) {
+                        setCustomPlaces([...customPlaces, customPlace.trim()]);
+                        toast({
+                          title: "Place saved!",
+                          description: `"${customPlace.trim()}" has been added to your custom places.`,
+                        });
+                      }
+                    }}
+                    disabled={!customPlace.trim()}
+                    data-testid="button-save-custom-place"
+                  >
+                    <Save className="w-4 h-4" />
+                  </Button>
+                </div>
               )}
               <p className="text-xs text-muted-foreground">
                 Choose a location or setting for your image, or select "Custom Place" to enter your own
@@ -2439,7 +2609,7 @@ const TextToImageGenerator = () => {
                             {effectOption.charAt(0).toUpperCase() + effectOption.slice(1)}
                           </CommandItem>
                         ))}
-                        {databaseCustomEffects.map((customEffect) => (
+                        {allCustomEffects.map((customEffect) => (
                           <CommandItem
                             key={customEffect.id}
                             value={customEffect.name}
@@ -2462,21 +2632,19 @@ const TextToImageGenerator = () => {
                   </Command>
                 </PopoverContent>
               </Popover>
-              {user && (
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    window.open('https://www.effectivegatecpm.com/qaiazg2t?key=4c4142eeaa9cc8ccb9790d18dd0ce03c', '_blank', 'noopener,noreferrer');
-                    loadAdsterraSocialBar();
-                    setShowCustomEffectDialog(true);
-                  }}
-                  className="w-full"
-                  data-testid="button-create-custom-effect"
-                >
-                  <Sparkles className="mr-2 h-4 w-4" />
-                  Create Custom Effect
-                </Button>
-              )}
+              <Button
+                variant="outline"
+                onClick={() => {
+                  window.open('https://www.effectivegatecpm.com/qaiazg2t?key=4c4142eeaa9cc8ccb9790d18dd0ce03c', '_blank', 'noopener,noreferrer');
+                  loadAdsterraSocialBar();
+                  setShowCustomEffectDialog(true);
+                }}
+                className="w-full"
+                data-testid="button-create-custom-effect"
+              >
+                <Sparkles className="mr-2 h-4 w-4" />
+                Create Custom Effect
+              </Button>
               <p className="text-xs text-muted-foreground">
                 Apply visual effects to enhance your generated image (900+ effects available)
               </p>
@@ -2543,7 +2711,7 @@ const TextToImageGenerator = () => {
                           />
                           None
                         </CommandItem>
-                        {backgrounds.map((backgroundOption, index) => (
+                        {allBackgrounds.map((backgroundOption, index) => (
                           <CommandItem
                             key={`${backgroundOption}-${index}`}
                             value={backgroundOption}
@@ -2568,13 +2736,31 @@ const TextToImageGenerator = () => {
                 </PopoverContent>
               </Popover>
               {isCustomBackground && (
-                <Input
-                  placeholder="Enter your custom background..."
-                  value={customBackground}
-                  onChange={(e) => setCustomBackground(e.target.value)}
-                  data-testid="input-custom-background"
-                  className="mt-2"
-                />
+                <div className="flex gap-2 mt-2">
+                  <Input
+                    placeholder="Enter your custom background..."
+                    value={customBackground}
+                    onChange={(e) => setCustomBackground(e.target.value)}
+                    data-testid="input-custom-background"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      if (customBackground.trim() && !customBackgrounds.includes(customBackground.trim())) {
+                        setCustomBackgrounds([...customBackgrounds, customBackground.trim()]);
+                        toast({
+                          title: "Background saved!",
+                          description: `"${customBackground.trim()}" has been added to your custom backgrounds.`,
+                        });
+                      }
+                    }}
+                    disabled={!customBackground.trim()}
+                    data-testid="button-save-custom-background"
+                  >
+                    <Save className="w-4 h-4" />
+                  </Button>
+                </div>
               )}
               <p className="text-xs text-muted-foreground">
                 Choose from 500+ background options or select "Custom Background" to enter your own
@@ -2642,7 +2828,7 @@ const TextToImageGenerator = () => {
                           />
                           None
                         </CommandItem>
-                        {skies.map((skyOption, index) => (
+                        {allSkies.map((skyOption, index) => (
                           <CommandItem
                             key={`${skyOption}-${index}`}
                             value={skyOption}
@@ -2667,13 +2853,31 @@ const TextToImageGenerator = () => {
                 </PopoverContent>
               </Popover>
               {isCustomSky && (
-                <Input
-                  placeholder="Enter your custom sky..."
-                  value={customSky}
-                  onChange={(e) => setCustomSky(e.target.value)}
-                  data-testid="input-custom-sky"
-                  className="mt-2"
-                />
+                <div className="flex gap-2 mt-2">
+                  <Input
+                    placeholder="Enter your custom sky..."
+                    value={customSky}
+                    onChange={(e) => setCustomSky(e.target.value)}
+                    data-testid="input-custom-sky"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      if (customSky.trim() && !customSkies.includes(customSky.trim())) {
+                        setCustomSkies([...customSkies, customSky.trim()]);
+                        toast({
+                          title: "Sky saved!",
+                          description: `"${customSky.trim()}" has been added to your custom skies.`,
+                        });
+                      }
+                    }}
+                    disabled={!customSky.trim()}
+                    data-testid="button-save-custom-sky"
+                  >
+                    <Save className="w-4 h-4" />
+                  </Button>
+                </div>
               )}
               <p className="text-xs text-muted-foreground">
                 Choose from 700+ sky options to set the atmosphere for your image
@@ -2741,7 +2945,7 @@ const TextToImageGenerator = () => {
                           />
                           None
                         </CommandItem>
-                        {weathers.map((weatherOption, index) => (
+                        {allWeather.map((weatherOption, index) => (
                           <CommandItem
                             key={`${weatherOption}-${index}`}
                             value={weatherOption}
@@ -2766,13 +2970,31 @@ const TextToImageGenerator = () => {
                 </PopoverContent>
               </Popover>
               {isCustomWeather && (
-                <Input
-                  placeholder="Enter your custom weather condition..."
-                  value={customWeather}
-                  onChange={(e) => setCustomWeather(e.target.value)}
-                  data-testid="input-custom-weather"
-                  className="mt-2"
-                />
+                <div className="flex gap-2 mt-2">
+                  <Input
+                    placeholder="Enter your custom weather condition..."
+                    value={customWeather}
+                    onChange={(e) => setCustomWeather(e.target.value)}
+                    data-testid="input-custom-weather"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      if (customWeather.trim() && !customWeathers.includes(customWeather.trim())) {
+                        setCustomWeathers([...customWeathers, customWeather.trim()]);
+                        toast({
+                          title: "Weather saved!",
+                          description: `"${customWeather.trim()}" has been added to your custom weather conditions.`,
+                        });
+                      }
+                    }}
+                    disabled={!customWeather.trim()}
+                    data-testid="button-save-custom-weather"
+                  >
+                    <Save className="w-4 h-4" />
+                  </Button>
+                </div>
               )}
               <p className="text-xs text-muted-foreground">
                 Select from 1100+ weather conditions or create your own custom weather condition
@@ -2840,7 +3062,7 @@ const TextToImageGenerator = () => {
                           />
                           None
                         </CommandItem>
-                        {expressions.map((expressionOption, index) => (
+                        {allExpressions.map((expressionOption, index) => (
                           <CommandItem
                             key={`${expressionOption}-${index}`}
                             value={expressionOption}
@@ -2865,13 +3087,31 @@ const TextToImageGenerator = () => {
                 </PopoverContent>
               </Popover>
               {isCustomExpression && (
-                <Input
-                  placeholder="Enter your custom expression..."
-                  value={customExpression}
-                  onChange={(e) => setCustomExpression(e.target.value)}
-                  data-testid="input-custom-expression"
-                  className="mt-2"
-                />
+                <div className="flex gap-2 mt-2">
+                  <Input
+                    placeholder="Enter your custom expression..."
+                    value={customExpression}
+                    onChange={(e) => setCustomExpression(e.target.value)}
+                    data-testid="input-custom-expression"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      if (customExpression.trim() && !customExpressions.includes(customExpression.trim())) {
+                        setCustomExpressions([...customExpressions, customExpression.trim()]);
+                        toast({
+                          title: "Expression saved!",
+                          description: `"${customExpression.trim()}" has been added to your custom expressions.`,
+                        });
+                      }
+                    }}
+                    disabled={!customExpression.trim()}
+                    data-testid="button-save-custom-expression"
+                  >
+                    <Save className="w-4 h-4" />
+                  </Button>
+                </div>
               )}
               <p className="text-xs text-muted-foreground">
                 Choose from 500+ expression options to set the mood and emotion
