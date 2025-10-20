@@ -29,6 +29,16 @@
   --border: hsl(0, 0%, 85%);
   --input: hsl(0, 0%, 100%);
   --ring: hsl(0, 0%, 0%);
+  
+  /* Sidebar colors */
+  --sidebar: hsl(0, 0%, 7%);
+  --sidebar-foreground: hsl(0, 0%, 95%);
+  --sidebar-primary: hsl(0, 0%, 0%);
+  --sidebar-primary-foreground: hsl(0, 0%, 100%);
+  --sidebar-accent: hsl(0, 0%, 15%);
+  --sidebar-accent-foreground: hsl(0, 0%, 100%);
+  --sidebar-border: hsl(0, 0%, 20%);
+  --sidebar-ring: hsl(0, 0%, 100%);
   color-scheme: light;
 }
 
@@ -52,6 +62,16 @@
   --border: hsl(0, 0%, 85%);
   --input: hsl(0, 0%, 100%);
   --ring: hsl(0, 0%, 0%);
+  
+  /* Sidebar colors */
+  --sidebar: hsl(0, 0%, 7%);
+  --sidebar-foreground: hsl(0, 0%, 95%);
+  --sidebar-primary: hsl(0, 0%, 0%);
+  --sidebar-primary-foreground: hsl(0, 0%, 100%);
+  --sidebar-accent: hsl(0, 0%, 15%);
+  --sidebar-accent-foreground: hsl(0, 0%, 100%);
+  --sidebar-border: hsl(0, 0%, 20%);
+  --sidebar-ring: hsl(0, 0%, 100%);
   color-scheme: light;
 }
 
