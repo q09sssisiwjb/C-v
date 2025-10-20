@@ -542,7 +542,7 @@ const TextToImageGenerator = () => {
   }
   const [localCustomEffects, setLocalCustomEffects] = useState<LocalCustomEffect[]>([]);
   
-  // Custom options state for localStorage
+  // Custom options state for sessionStorage (deleted after refresh)
   const [customPlaces, setCustomPlaces] = useState<string[]>([]);
   const [customAspectRatios, setCustomAspectRatios] = useState<{ name: string; width: number; height: number }[]>([]);
   const [customBackgrounds, setCustomBackgrounds] = useState<string[]>([]);
@@ -646,63 +646,63 @@ const TextToImageGenerator = () => {
     };
   }, []);
 
-  // Load all custom options from localStorage on mount
+  // Load all custom options from sessionStorage on mount (temporary, deleted on refresh)
   useEffect(() => {
-    const savedCustomStyles = localStorage.getItem('customArtStyles');
+    const savedCustomStyles = sessionStorage.getItem('customArtStyles');
     if (savedCustomStyles) {
       setCustomArtStyles(JSON.parse(savedCustomStyles));
     }
     
-    // Load custom styles info from localStorage
-    const savedCustomStylesInfo = localStorage.getItem('customArtStylesInfo');
+    // Load custom styles info from sessionStorage
+    const savedCustomStylesInfo = sessionStorage.getItem('customArtStylesInfo');
     if (savedCustomStylesInfo) {
       setCustomStylesInfo(JSON.parse(savedCustomStylesInfo));
     }
     
-    // Load custom models from localStorage
-    const savedCustomModels = localStorage.getItem('localCustomModels');
+    // Load custom models from sessionStorage
+    const savedCustomModels = sessionStorage.getItem('localCustomModels');
     if (savedCustomModels) {
       setLocalCustomModels(JSON.parse(savedCustomModels));
     }
     
-    // Load custom effects from localStorage
-    const savedCustomEffects = localStorage.getItem('localCustomEffects');
+    // Load custom effects from sessionStorage
+    const savedCustomEffects = sessionStorage.getItem('localCustomEffects');
     if (savedCustomEffects) {
       setLocalCustomEffects(JSON.parse(savedCustomEffects));
     }
     
-    // Load custom places from localStorage
-    const savedCustomPlaces = localStorage.getItem('customPlaces');
+    // Load custom places from sessionStorage
+    const savedCustomPlaces = sessionStorage.getItem('customPlaces');
     if (savedCustomPlaces) {
       setCustomPlaces(JSON.parse(savedCustomPlaces));
     }
     
-    // Load custom aspect ratios from localStorage
-    const savedCustomAspectRatios = localStorage.getItem('customAspectRatios');
+    // Load custom aspect ratios from sessionStorage
+    const savedCustomAspectRatios = sessionStorage.getItem('customAspectRatios');
     if (savedCustomAspectRatios) {
       setCustomAspectRatios(JSON.parse(savedCustomAspectRatios));
     }
     
-    // Load custom backgrounds from localStorage
-    const savedCustomBackgrounds = localStorage.getItem('customBackgrounds');
+    // Load custom backgrounds from sessionStorage
+    const savedCustomBackgrounds = sessionStorage.getItem('customBackgrounds');
     if (savedCustomBackgrounds) {
       setCustomBackgrounds(JSON.parse(savedCustomBackgrounds));
     }
     
-    // Load custom skies from localStorage
-    const savedCustomSkies = localStorage.getItem('customSkies');
+    // Load custom skies from sessionStorage
+    const savedCustomSkies = sessionStorage.getItem('customSkies');
     if (savedCustomSkies) {
       setCustomSkies(JSON.parse(savedCustomSkies));
     }
     
-    // Load custom weathers from localStorage
-    const savedCustomWeathers = localStorage.getItem('customWeathers');
+    // Load custom weathers from sessionStorage
+    const savedCustomWeathers = sessionStorage.getItem('customWeathers');
     if (savedCustomWeathers) {
       setCustomWeathers(JSON.parse(savedCustomWeathers));
     }
     
-    // Load custom expressions from localStorage
-    const savedCustomExpressions = localStorage.getItem('customExpressions');
+    // Load custom expressions from sessionStorage
+    const savedCustomExpressions = sessionStorage.getItem('customExpressions');
     if (savedCustomExpressions) {
       setCustomExpressions(JSON.parse(savedCustomExpressions));
     }
@@ -743,54 +743,54 @@ const TextToImageGenerator = () => {
     }
   }, [toast]);
 
-  // Save custom art styles to localStorage whenever they change
+  // Save custom art styles to sessionStorage whenever they change (temporary)
   useEffect(() => {
-    localStorage.setItem('customArtStyles', JSON.stringify(customArtStyles));
+    sessionStorage.setItem('customArtStyles', JSON.stringify(customArtStyles));
   }, [customArtStyles]);
   
-  // Save custom styles info to localStorage whenever they change
+  // Save custom styles info to sessionStorage whenever they change (temporary)
   useEffect(() => {
-    localStorage.setItem('customArtStylesInfo', JSON.stringify(customStylesInfo));
+    sessionStorage.setItem('customArtStylesInfo', JSON.stringify(customStylesInfo));
   }, [customStylesInfo]);
   
-  // Save local custom models to localStorage whenever they change
+  // Save local custom models to sessionStorage whenever they change (temporary)
   useEffect(() => {
-    localStorage.setItem('localCustomModels', JSON.stringify(localCustomModels));
+    sessionStorage.setItem('localCustomModels', JSON.stringify(localCustomModels));
   }, [localCustomModels]);
   
-  // Save local custom effects to localStorage whenever they change
+  // Save local custom effects to sessionStorage whenever they change (temporary)
   useEffect(() => {
-    localStorage.setItem('localCustomEffects', JSON.stringify(localCustomEffects));
+    sessionStorage.setItem('localCustomEffects', JSON.stringify(localCustomEffects));
   }, [localCustomEffects]);
   
-  // Save custom places to localStorage whenever they change
+  // Save custom places to sessionStorage whenever they change (temporary)
   useEffect(() => {
-    localStorage.setItem('customPlaces', JSON.stringify(customPlaces));
+    sessionStorage.setItem('customPlaces', JSON.stringify(customPlaces));
   }, [customPlaces]);
   
-  // Save custom aspect ratios to localStorage whenever they change
+  // Save custom aspect ratios to sessionStorage whenever they change (temporary)
   useEffect(() => {
-    localStorage.setItem('customAspectRatios', JSON.stringify(customAspectRatios));
+    sessionStorage.setItem('customAspectRatios', JSON.stringify(customAspectRatios));
   }, [customAspectRatios]);
   
-  // Save custom backgrounds to localStorage whenever they change
+  // Save custom backgrounds to sessionStorage whenever they change (temporary)
   useEffect(() => {
-    localStorage.setItem('customBackgrounds', JSON.stringify(customBackgrounds));
+    sessionStorage.setItem('customBackgrounds', JSON.stringify(customBackgrounds));
   }, [customBackgrounds]);
   
-  // Save custom skies to localStorage whenever they change
+  // Save custom skies to sessionStorage whenever they change (temporary)
   useEffect(() => {
-    localStorage.setItem('customSkies', JSON.stringify(customSkies));
+    sessionStorage.setItem('customSkies', JSON.stringify(customSkies));
   }, [customSkies]);
   
-  // Save custom weathers to localStorage whenever they change
+  // Save custom weathers to sessionStorage whenever they change (temporary)
   useEffect(() => {
-    localStorage.setItem('customWeathers', JSON.stringify(customWeathers));
+    sessionStorage.setItem('customWeathers', JSON.stringify(customWeathers));
   }, [customWeathers]);
   
-  // Save custom expressions to localStorage whenever they change
+  // Save custom expressions to sessionStorage whenever they change (temporary)
   useEffect(() => {
-    localStorage.setItem('customExpressions', JSON.stringify(customExpressions));
+    sessionStorage.setItem('customExpressions', JSON.stringify(customExpressions));
   }, [customExpressions]);
 
   // Handle URL parameter for pre-selecting an effect
@@ -1177,6 +1177,12 @@ const TextToImageGenerator = () => {
         return Math.round(clamped / 64) * 64;
       };
       return [clampAndRound(customWidth), clampAndRound(customHeight)];
+    }
+    
+    // Check custom aspect ratios first
+    const customRatio = customAspectRatios.find(r => r.name === aspectRatio);
+    if (customRatio) {
+      return [customRatio.width, customRatio.height];
     }
     
     // Use standard, API-friendly dimensions that are multiples of 64
@@ -2290,41 +2296,86 @@ const TextToImageGenerator = () => {
                   <SelectItem value="16:9">Widescreen (16:9)</SelectItem>
                   <SelectItem value="4:3">Landscape (4:3)</SelectItem>
                   <SelectItem value="9:16">Portrait (9:16)</SelectItem>
+                  {customAspectRatios.map((ratio) => (
+                    <SelectItem key={ratio.name} value={ratio.name}>
+                      {ratio.name} ({ratio.width}x{ratio.height})
+                    </SelectItem>
+                  ))}
                   <SelectItem value="custom">Custom</SelectItem>
                 </SelectContent>
               </Select>
               
               {aspectRatio === 'custom' && (
-                <div className="grid grid-cols-2 gap-2 mt-2">
-                  <div>
-                    <Label htmlFor="custom-width" className="text-xs">Width</Label>
-                    <Input
-                      id="custom-width"
-                      type="number"
-                      placeholder="1024"
-                      value={customWidth}
-                      onChange={(e) => setCustomWidth(e.target.value)}
-                      min="256"
-                      max="2048"
-                      className="text-sm"
-                      data-testid="input-custom-width"
-                    />
+                <div className="space-y-2 mt-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <Label htmlFor="custom-width" className="text-xs">Width</Label>
+                      <Input
+                        id="custom-width"
+                        type="number"
+                        placeholder="1024"
+                        value={customWidth}
+                        onChange={(e) => setCustomWidth(e.target.value)}
+                        min="256"
+                        max="2048"
+                        className="text-sm"
+                        data-testid="input-custom-width"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="custom-height" className="text-xs">Height</Label>
+                      <Input
+                        id="custom-height"
+                        type="number"
+                        placeholder="1024"
+                        value={customHeight}
+                        onChange={(e) => setCustomHeight(e.target.value)}
+                        min="256"
+                        max="2048"
+                        className="text-sm"
+                        data-testid="input-custom-height"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="custom-height" className="text-xs">Height</Label>
-                    <Input
-                      id="custom-height"
-                      type="number"
-                      placeholder="1024"
-                      value={customHeight}
-                      onChange={(e) => setCustomHeight(e.target.value)}
-                      min="256"
-                      max="2048"
-                      className="text-sm"
-                      data-testid="input-custom-height"
-                    />
-                  </div>
+                  <Input
+                    placeholder="Name for this ratio (e.g., My Custom)"
+                    className="text-sm"
+                    id="custom-ratio-name"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const nameInput = document.getElementById('custom-ratio-name') as HTMLInputElement;
+                      const name = nameInput?.value.trim();
+                      if (name && customWidth && customHeight) {
+                        const newRatio = {
+                          name,
+                          width: parseInt(customWidth),
+                          height: parseInt(customHeight)
+                        };
+                        if (!customAspectRatios.some(r => r.name === name)) {
+                          setCustomAspectRatios([...customAspectRatios, newRatio]);
+                          setAspectRatio(name);
+                          nameInput.value = '';
+                          toast({
+                            title: "Aspect ratio saved!",
+                            description: `"${name}" has been added to your ratios (session only).`,
+                          });
+                        }
+                      }
+                    }}
+                    className="w-full"
+                  >
+                    <Save className="w-4 h-4 mr-1" />
+                    Save Ratio
+                  </Button>
                 </div>
+              )}
+              {customAspectRatios.length > 0 && (
+                <p className="text-xs text-muted-foreground">
+                  {customAspectRatios.length} custom ratio(s) - will be deleted after refresh
+                </p>
               )}
             </div>
 
