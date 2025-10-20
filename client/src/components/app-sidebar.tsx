@@ -67,7 +67,7 @@ export function AppSidebar() {
             alt="CreatiVista ai Logo" 
             className="w-8 h-8 rounded-lg object-cover"
           />
-          <span className="text-lg font-bold">CreatiVista ai</span>
+          <span className="text-lg font-bold text-white">CreatiVista ai</span>
         </div>
       </SidebarHeader>
 
@@ -132,13 +132,13 @@ export function AppSidebar() {
         <Separator className="mb-3" />
         <div className="space-y-3">
           <div className="px-2">
-            <p className="text-xs font-medium text-muted-foreground mb-2">Follow Us</p>
+            <p className="text-xs font-medium text-white mb-2">Follow Us</p>
             <div className="flex items-center gap-3">
               <a
                 href="https://t.me/freeimagenai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
+                className="text-white hover:text-gray-300 transition-colors"
                 data-testid="social-link-telegram"
                 aria-label="Telegram"
               >
@@ -150,7 +150,7 @@ export function AppSidebar() {
                 href="https://x.com/NeuraStudio_ai/likes"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
+                className="text-white hover:text-gray-300 transition-colors"
                 data-testid="social-link-twitter"
                 aria-label="Twitter"
               >
@@ -162,7 +162,7 @@ export function AppSidebar() {
                 href="https://www.instagram.com/neura_vision___ai/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
+                className="text-white hover:text-gray-300 transition-colors"
                 data-testid="social-link-instagram"
                 aria-label="Instagram"
               >
@@ -174,7 +174,7 @@ export function AppSidebar() {
                 href="https://discord.gg/n5xppwt6"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
+                className="text-white hover:text-gray-300 transition-colors"
                 data-testid="social-link-discord"
                 aria-label="Discord"
               >
