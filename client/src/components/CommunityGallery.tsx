@@ -12,14 +12,8 @@ import {
   Cpu, 
   Clock, 
   Circle, 
-  Eye,
-  Square,
-  Smartphone,
-  ChevronDown,
-  Check 
+  Eye
 } from 'lucide-react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
 import type { CommunityImage } from '@shared/schema';
 
 // Gallery image type (no longer using database)
@@ -60,7 +54,6 @@ const fallbackGalleryItems = [
 const CommunityGallery = () => {
   const limit = 500; // Maximum 500 images
   const [selectedArtStyle, setSelectedArtStyle] = useState<string>('all');
-  const [selectedAspectRatio, setSelectedAspectRatio] = useState<string>('all');
 
   // Art style filters
   const artStyleFilters = [
@@ -76,16 +69,6 @@ const CommunityGallery = () => {
     { id: 'vintage', label: 'Vintage', icon: Clock },
     { id: 'minimalist', label: 'Minimalist', icon: Circle },
     { id: 'surreal', label: 'Surreal', icon: Eye }
-  ];
-
-  // Aspect ratio filters
-  const aspectRatioFilters = [
-    { id: 'all', label: 'All Ratios', icon: Square },
-    { id: '1:1', label: 'Square (1:1)', icon: Square },
-    { id: '16:9', label: 'Landscape (16:9)', icon: Smartphone },
-    { id: '4:3', label: 'Standard (4:3)', icon: Square },
-    { id: '9:16', label: 'Portrait (9:16)', icon: Smartphone },
-    { id: '3:4', label: 'Portrait (3:4)', icon: Smartphone }
   ];
 
   // Fetch community images from admin-added collection
@@ -148,10 +131,7 @@ const CommunityGallery = () => {
       // Filter by art style
       const styleMatch = selectedArtStyle === 'all' || mapArtStyleToFilter(img.artStyle) === selectedArtStyle;
       
-      // Filter by aspect ratio
-      const ratioMatch = selectedAspectRatio === 'all' || img.aspectRatio === selectedAspectRatio;
-      
-      return styleMatch && ratioMatch;
+      return styleMatch;
     });
     
     return filteredImages.map(img => ({
@@ -193,43 +173,9 @@ const CommunityGallery = () => {
     <section id="gallery" className="pt-0 pb-16 bg-muted/20" data-testid="gallery-section">
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-left mb-6 animate-fade-in">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl md:text-2xl font-bold font-headline text-foreground" data-testid="gallery-title">
-              Community Creations
-            </h2>
-            
-            {/* Ratio Filter Dropdown - Right Side */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center gap-2"
-                  data-testid="ratio-filter-dropdown"
-                >
-                  <Image className="w-4 h-4" />
-                  {aspectRatioFilters.find(f => f.id === selectedAspectRatio)?.label || 'Square (1:1)'}
-                  <ChevronDown className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                {aspectRatioFilters.map((filter) => (
-                  <DropdownMenuItem
-                    key={filter.id}
-                    onClick={() => setSelectedAspectRatio(filter.id)}
-                    className="flex items-center justify-between"
-                    data-testid={`ratio-dropdown-${filter.id}`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <filter.icon className="w-4 h-4" />
-                      <span>{filter.label}</span>
-                    </div>
-                    {selectedAspectRatio === filter.id && <Check className="w-4 h-4" />}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          <h2 className="text-xl md:text-2xl font-bold font-headline text-foreground mb-4" data-testid="gallery-title">
+            Community Creations
+          </h2>
           
           {/* Art Style Filters - Horizontal Slider */}
           <div className="mb-6">
@@ -270,8 +216,8 @@ const CommunityGallery = () => {
               </h3>
               <p className="text-muted-foreground mb-4">
                 {selectedArtStyle !== 'all'
-                  ? `No ${artStyleFilters.find(f => f.id === selectedArtStyle)?.label} images in ${aspectRatioFilters.find(f => f.id === selectedAspectRatio)?.label} format found`
-                  : `No images in ${aspectRatioFilters.find(f => f.id === selectedAspectRatio)?.label} format found`
+                  ? `No ${artStyleFilters.find(f => f.id === selectedArtStyle)?.label} images found`
+                  : `No images found`
                 }
               </p>
               <div className="flex gap-2 justify-center">
