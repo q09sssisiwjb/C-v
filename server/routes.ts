@@ -233,10 +233,10 @@ Return only the enhanced prompt, nothing else.`;
     try {
       const { sketchData, prompt } = req.body;
 
-      if (!sketchData || !prompt) {
+      if (!sketchData) {
         return res.status(400).json({
           error: "Missing required fields",
-          details: "Both sketchData and prompt are required"
+          details: "sketchData is required"
         });
       }
 
@@ -252,7 +252,11 @@ Return only the enhanced prompt, nothing else.`;
         type: 'image/png'
       }];
 
-      const result = await generateImageToImage(images, prompt);
+      const transformPrompt = prompt && prompt.trim() 
+        ? prompt.trim() 
+        : "Convert this sketch into a realistic, high-quality image with natural colors and lighting";
+
+      const result = await generateImageToImage(images, transformPrompt);
 
       res.json({
         success: true,
