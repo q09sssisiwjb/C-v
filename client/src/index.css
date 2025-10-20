@@ -85,6 +85,21 @@
   }
 }
 
+/* Force sidebar text to be black and visible */
+[data-sidebar="sidebar"] {
+  background-color: hsl(0, 0%, 98%) !important;
+}
+
+[data-sidebar="menu-button"],
+[data-sidebar="menu-button"] * {
+  color: hsl(0, 0%, 0%) !important;
+}
+
+[data-sidebar="header"] *,
+[data-sidebar="footer"] * {
+  color: hsl(0, 0%, 0%) !important;
+}
+
 @keyframes slideIn {
   from { 
     opacity: 0; 
