@@ -24,6 +24,26 @@ import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import DMCA from "@/pages/DMCA";
 import CanvasEditor from "@/pages/CanvasEditor";
 import API from "@/pages/API";
+import { useEffect } from "react";
+
+const AdsterraSocialBar = () => {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = '//pl27831772.effectivegatecpm.com/17/0e/67/170e67842e34ff156ec9833bd5088524.js';
+    script.async = true;
+    
+    document.body.appendChild(script);
+    
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
+
+  return null;
+};
 
 function Router() {
   return (
@@ -91,6 +111,7 @@ function App() {
           </div>
           <ChatButton />
           <Toaster />
+          <AdsterraSocialBar />
         </SidebarProvider>
       </TooltipProvider>
     </QueryClientProvider>
