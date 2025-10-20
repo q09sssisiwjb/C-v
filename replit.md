@@ -43,6 +43,10 @@ The application uses a simplified storage abstraction layer with Neon PostgreSQL
 - **Updated function calls**: Fixed argument order to `generateImageToImage(images, transformPrompt)` matching the function signature in `server/gemini.ts`
 - **Created `/api/sketch-to-image` endpoint**: Added missing endpoint for canvas editor sketch-to-realistic-image conversion
 - **Made prompt optional in Canvas Editor**: Updated endpoint to use a default prompt when user doesn't provide one, matching the UI's "Prompt (Optional)" label
+- **Improved prompt structure for sketches**: Enhanced prompt to properly combine user's drawing with their custom text prompt
+  - Explicitly tells AI the input is a hand-drawn sketch
+  - Instructs conversion to photorealistic image while maintaining sketch composition
+  - Custom user prompts now add creative direction without losing the sketch structure
 - **Improved validation**: Added array validation for images parameter and proper error handling for both endpoints
 - Both Canvas Editor and Image-to-Image pages now work correctly with the Gemini API
 
