@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.ts",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}
