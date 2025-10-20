@@ -67,7 +67,7 @@ export function AppSidebar() {
             alt="CreatiVista ai Logo" 
             className="w-8 h-8 rounded-lg object-cover"
           />
-          <span className="text-lg font-bold text-white">CreatiVista ai</span>
+          <span className="text-lg font-bold text-black dark:text-white">CreatiVista ai</span>
         </div>
       </SidebarHeader>
 
@@ -78,7 +78,7 @@ export function AppSidebar() {
               {navigation.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild data-testid={`nav-${item.title.toLowerCase().replace(/\s+/g, '-')}`}>
-                    <Link href={item.url} className="text-white">
+                    <Link href={item.url} className="text-black dark:text-white">
                       <item.icon className="w-4 h-4" />
                       <span>{item.title}</span>
                     </Link>
@@ -97,7 +97,7 @@ export function AppSidebar() {
               {tools.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild data-testid={`nav-${item.title.toLowerCase().replace(/\s+/g, '-')}`}>
-                    <Link href={item.url} className="text-white">
+                    <Link href={item.url} className="text-black dark:text-white">
                       <item.icon className="w-4 h-4" />
                       <span>{item.title}</span>
                     </Link>
@@ -116,7 +116,7 @@ export function AppSidebar() {
               {infoPages.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild data-testid={`nav-${item.title.toLowerCase().replace(/\s+/g, '-')}`}>
-                    <Link href={item.url} className="text-white">
+                    <Link href={item.url} className="text-black dark:text-white">
                       <item.icon className="w-4 h-4" />
                       <span>{item.title}</span>
                     </Link>
@@ -132,13 +132,13 @@ export function AppSidebar() {
         <Separator className="mb-3" />
         <div className="space-y-3">
           <div className="px-2">
-            <p className="text-xs font-medium text-white mb-2">Follow Us</p>
+            <p className="text-xs font-medium text-black dark:text-white mb-2">Follow Us</p>
             <div className="flex items-center gap-3">
               <a
                 href="https://t.me/freeimagenai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-gray-300 transition-colors"
+                className="text-black dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                 data-testid="social-link-telegram"
                 aria-label="Telegram"
               >
@@ -150,7 +150,7 @@ export function AppSidebar() {
                 href="https://x.com/NeuraStudio_ai/likes"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-gray-300 transition-colors"
+                className="text-black dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                 data-testid="social-link-twitter"
                 aria-label="Twitter"
               >
@@ -162,7 +162,7 @@ export function AppSidebar() {
                 href="https://www.instagram.com/neura_vision___ai/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-gray-300 transition-colors"
+                className="text-black dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                 data-testid="social-link-instagram"
                 aria-label="Instagram"
               >
@@ -174,7 +174,7 @@ export function AppSidebar() {
                 href="https://discord.gg/n5xppwt6"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-gray-300 transition-colors"
+                className="text-black dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                 data-testid="social-link-discord"
                 aria-label="Discord"
               >
