@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import { useEffect, useRef } from "react";
 
 const tools = [
   {
@@ -118,6 +119,66 @@ const tools = [
   }
 ];
 
+const AdBanner = () => {
+  const mobileAdRef = useRef<HTMLDivElement>(null);
+  const desktopAdRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Load mobile ad script
+    if (mobileAdRef.current && !mobileAdRef.current.hasChildNodes()) {
+      const mobileScript = document.createElement('script');
+      mobileScript.type = 'text/javascript';
+      mobileScript.innerHTML = `
+        atOptions = {
+          'key' : 'cb0fcd15f1cc600221094578455852a9',
+          'format' : 'iframe',
+          'height' : 50,
+          'width' : 320,
+          'params' : {}
+        };
+      `;
+      
+      const mobileInvokeScript = document.createElement('script');
+      mobileInvokeScript.type = 'text/javascript';
+      mobileInvokeScript.src = '//www.highperformanceformat.com/cb0fcd15f1cc600221094578455852a9/invoke.js';
+      
+      mobileAdRef.current.appendChild(mobileScript);
+      mobileAdRef.current.appendChild(mobileInvokeScript);
+    }
+
+    // Load desktop ad script
+    if (desktopAdRef.current && !desktopAdRef.current.hasChildNodes()) {
+      const desktopScript = document.createElement('script');
+      desktopScript.type = 'text/javascript';
+      desktopScript.innerHTML = `
+        atOptions = {
+          'key' : '4f719b8be7c355f105aad5d9ecc3ad4a',
+          'format' : 'iframe',
+          'height' : 90,
+          'width' : 728,
+          'params' : {}
+        };
+      `;
+      
+      const desktopInvokeScript = document.createElement('script');
+      desktopInvokeScript.type = 'text/javascript';
+      desktopInvokeScript.src = '//www.highperformanceformat.com/4f719b8be7c355f105aad5d9ecc3ad4a/invoke.js';
+      
+      desktopAdRef.current.appendChild(desktopScript);
+      desktopAdRef.current.appendChild(desktopInvokeScript);
+    }
+  }, []);
+
+  return (
+    <div className="w-full flex justify-center py-4" data-testid="ad-banner">
+      {/* Mobile Ad - 320x50 */}
+      <div ref={mobileAdRef} className="block md:hidden" data-testid="ad-mobile"></div>
+      {/* Desktop Ad - 728x90 */}
+      <div ref={desktopAdRef} className="hidden md:block" data-testid="ad-desktop"></div>
+    </div>
+  );
+};
+
 const ToolsSection = () => {
   return (
     <>
@@ -180,6 +241,9 @@ const ToolsSection = () => {
           </div>
         </div>
       </section>
+      
+      {/* Ad Banner below tools */}
+      <AdBanner />
     </>
   );
 };
