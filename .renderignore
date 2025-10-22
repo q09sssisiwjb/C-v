@@ -1,0 +1,33 @@
+# Render Ignore File
+# Files and directories to exclude from Render deployment
+
+# Development files
+.replit
+*.md
+!DEPLOYMENT_GUIDE_RENDER.md
+
+# Local development
+.local/
+attached_assets/
+
+# Documentation
+DEPLOYMENT_INSTRUCTIONS.md
+
+# Tests
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
